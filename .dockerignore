@@ -1,0 +1,14 @@
+# Ignore random stuff non important from hive's perspective
+.git
+
+# Ignore any local build artifacts and runtime caches
+hive
+hivechain
+hiveview
+workspace
+target
+**/target
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache

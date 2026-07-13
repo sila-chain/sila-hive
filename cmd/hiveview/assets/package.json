@@ -1,0 +1,12 @@
+{
+  "name": "hiveview",
+  "version": "0.0.1",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/sila-chain/sila-hive"
+  },
+  "license": "GPLv3"
+}

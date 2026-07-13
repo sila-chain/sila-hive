@@ -1,0 +1,35 @@
+package main
+
+import (
+	"github.com/sila-chain/sila-hive/hivesim"
+	"github.com/sila-chain/sila-hive/simulators/sil2/common/clients"
+	suite_base "github.com/sila-chain/sila-hive/simulators/sil2/dencun/suites/base"
+	suite_builder "github.com/sila-chain/sila-hive/simulators/sil2/dencun/suites/builder"
+	suite_blobs_gossip "github.com/sila-chain/sila-hive/simulators/sil2/dencun/suites/p2p/gossip/blobs"
+	suite_reorg "github.com/sila-chain/sila-hive/simulators/sil2/dencun/suites/reorg"
+	suite_sync "github.com/sila-chain/sila-hive/simulators/sil2/dencun/suites/sync"
+)
+
+func main() {
+	// Create simulator that runs all tests
+	sim := hivesim.New()
+	if sim == nil {
+		panic("failed to create simulator")
+	}
+	// From the simulator we can get all client types provided
+	clientTypes, err := sim.ClientTypes()
+	if err != nil {
+		panic(err)
+	}
+	clientsByRole := clients.ClientsByRole(clientTypes)
+	if clientsByRole == nil {
+		panic("failed to create clients by role")
+	}
+
+	// Mark suites for execution
+	hivesim.MustRunSuite(sim, suite_base.Suite(clientsByRole))
+	hivesim.MustRunSuite(sim, suite_sync.Suite(clientsByRole))
+	hivesim.MustRunSuite(sim, suite_builder.Suite(clientsByRole))
+	hivesim.MustRunSuite(sim, suite_reorg.Suite(clientsByRole))
+	hivesim.MustRunSuite(sim, suite_blobs_gossip.Suite(clientsByRole))
+}

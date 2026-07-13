@@ -1,0 +1,85 @@
+#!/bin/bash
+set -euo pipefail
+
+DEVNET_LABEL="${HIVE_LEAN_DEVNET_LABEL:-devnet4}"
+ASSET_ROOT="/tmp/qlean-runtime"
+LOCAL_IP_PLACEHOLDER="__HIVE_LOCAL_IP__"
+
+detect_local_ip() {
+    hostname -i 2>/dev/null | tr ' ' '\n' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' | grep -v '^127\.' | head -n 1
+}
+
+materialize_runtime_local_ip() {
+    local runtime_ip
+
+    if [ ! -f "$ASSET_ROOT/validator-config.yaml" ]; then
+        return
+    fi
+
+    if ! grep -q "$LOCAL_IP_PLACEHOLDER" "$ASSET_ROOT/validator-config.yaml"; then
+        return
+    fi
+
+    runtime_ip="$(detect_local_ip || true)"
+    if [ -z "$runtime_ip" ]; then
+        echo "Unable to resolve local container IP for $CLEAN_NODE_ID" >&2
+        exit 1
+    fi
+
+    sed -i "s/${LOCAL_IP_PLACEHOLDER}/${runtime_ip}/g" "$ASSET_ROOT/validator-config.yaml"
+}
+
+case "$DEVNET_LABEL" in
+    devnet4)
+        DEFAULT_QLEAN_BIN="/usr/local/bin/qlean-devnet4"
+        ;;
+    devnet5)
+        DEFAULT_QLEAN_BIN="/usr/local/bin/qlean-devnet5"
+        ;;
+    *)
+        echo "Unsupported Lean devnet label: $DEVNET_LABEL" >&2
+        exit 1
+        ;;
+esac
+
+QLEAN_BIN="${QLEAN_BIN:-$DEFAULT_QLEAN_BIN}"
+
+V_IDX="${HIVE_VALIDATOR_INDEX:-0}" 
+RAW_ID="${HIVE_NODE_ID:-${HIVE_CLIENT_ID:-qlean_$V_IDX}}" 
+CLEAN_NODE_ID=$(echo "$RAW_ID" | sed 's/^0x//') 
+
+for var in $(env | grep '^HIVE_' | cut -d= -f1); do 
+    export "$var"="${!var#0x}" 
+done 
+
+until [[ -f "$ASSET_ROOT/config.yaml" ]]; do sleep 0.5; done 
+
+find "$ASSET_ROOT" -type f \( -name "*.yaml" -o -name "*.json" \) -exec sed -i 's/: 0x/: /g; s/\"0x/\"/g' {} + || true 
+materialize_runtime_local_ip
+
+NODE_KEY="$(cat "$ASSET_ROOT/node.key")"
+
+FLAGS=( 
+    --genesis-dir "$ASSET_ROOT"
+    --data-dir "/data" 
+    --node-id "$CLEAN_NODE_ID" 
+    --node-key "$NODE_KEY"
+    --listen-addr "/ip4/0.0.0.0/udp/9000/quic-v1" 
+    --bootnodes "$ASSET_ROOT/nodes.yaml"
+    --api-host "0.0.0.0" 
+    --api-port 5052 
+) 
+
+if [ "${HIVE_IS_AGGREGATOR:-0}" = "1" ]; then
+    FLAGS+=(--is-aggregator)
+fi
+
+if [ -n "${HIVE_ATTESTATION_COMMITTEE_COUNT:-}" ] && [ "$HIVE_ATTESTATION_COMMITTEE_COUNT" != "1" ]; then
+    FLAGS+=(--attestation-committee-count "$HIVE_ATTESTATION_COMMITTEE_COUNT")
+fi
+
+if [ -n "${HIVE_CHECKPOINT_SYNC_URL:-}" ]; then
+    FLAGS+=(--checkpoint-sync-url "$HIVE_CHECKPOINT_SYNC_URL")
+fi
+
+exec "$QLEAN_BIN" "${FLAGS[@]}"

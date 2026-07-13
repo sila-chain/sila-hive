@@ -1,0 +1,6 @@
+go 1.18
+
+use (
+	./simulators/sil2/engine
+	./simulators/sil2/testnet
+)

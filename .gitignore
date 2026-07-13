@@ -1,0 +1,22 @@
+.vscode/
+workspace
+.idea/
+
+# Python cache / build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# build output
+/hive
+/hivechain
+/hiveview
+
+# build output for rust simulators and hivesim-rs files
+/target
+simulators/**/target
+hivesim-rs/Cargo.lock
+hivesim-rs/target
