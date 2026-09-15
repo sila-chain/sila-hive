@@ -2,7 +2,7 @@
 
 FROM golang:1.24-alpine as builder
 ARG github=sila-chain/go-sila
-ARG tag=master
+ARG ref=main
 ARG GOPROXY
 
 ENV GOPROXY=${GOPROXY}
@@ -10,9 +10,12 @@ ENV GOPROXY=${GOPROXY}
 RUN \
   apk add --update bash curl jq git make gcc musl-dev                 \
   ca-certificates linux-headers                                    && \
-  echo "Cloning: $github - $tag"                                   && \
-  git clone --depth 1 --branch $tag https://github.com/$github     && \
-  cd go-sila                                                   && \
+  echo "Fetching: $github - $ref"                                  && \
+  git init /go-sila                                                && \
+  cd /go-sila                                                      && \
+  git remote add origin https://github.com/$github                 && \
+  git fetch --depth 1 origin "$ref"                               && \
+  git checkout --detach FETCH_HEAD                                 && \
   make sila                                                        && \
   cp build/bin/sila /usr/local/bin/sila                            && \
   apk del go git make gcc musl-dev linux-headers                   && \
