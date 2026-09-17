@@ -17,18 +17,21 @@ RUN git clone --depth 1 https://github.com/sila-chain/execution-specs.git && \
         git checkout FETCH_HEAD; \
     fi
 
+# Preserve any workflow-provided local fixture archive in the simulator image.
+COPY . /hive-simulator-input
+
 WORKDIR /execution-specs/packages/testing
 
 # Cache the fixtures. This is done to avoid re-downloading the fixtures every time
-# the container starts.
-# If newer version of the fixtures is needed, the image needs to be rebuilt.
-# Use `--docker.nocache` flag to force rebuild.
-RUN uv sync
-RUN uv run consume cache --input "$FIXTURES"
-
+# the container starts. A local archive copied into the simulator build context is
+# preferred when present; otherwise the configured fixture reference is used.
+RUN fixture_input="$FIXTURES"; \
+    if [ -f "/hive-simulator-input/$FIXTURES" ]; then fixture_input="/hive-simulator-input/$FIXTURES"; fi; \
+    uv sync && \
+    uv run consume cache --input "$fixture_input"
 
 ## Define `consume engine` entry point using the local fixtures
 # TODO: remove when fixed on nimbus-el side.
 ARG disable_strict_exception_matching=nimbus-el
 ENV DISABLE_STRICT_EXCEPTION_MATCHING=${disable_strict_exception_matching}
-ENTRYPOINT uv run consume engine -v --input "$FIXTURES" --disable-strict-exception-matching "$DISABLE_STRICT_EXCEPTION_MATCHING"
+ENTRYPOINT ["/bin/sh", "-c", "fixture_input=\"$FIXTURES\"; if [ -f \"/hive-simulator-input/$FIXTURES\" ]; then fixture_input=\"/hive-simulator-input/$FIXTURES\"; fi; exec uv run consume engine -v --input \"$fixture_input\" --disable-strict-exception-matching \"$DISABLE_STRICT_EXCEPTION_MATCHING\""]
