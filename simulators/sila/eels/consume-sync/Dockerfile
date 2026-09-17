@@ -17,14 +17,18 @@ RUN git clone --depth 1 https://github.com/sila-chain/execution-specs.git && \
         git checkout FETCH_HEAD; \
     fi
 
+# Preserve any workflow-provided local fixture archive in the simulator image.
+COPY . /hive-simulator-input
+
 WORKDIR /execution-specs/packages/testing
 
 # Cache the fixtures. This is done to avoid re-downloading the fixtures every time
-# the container starts.
-# If newer version of the fixtures is needed, the image needs to be rebuilt.
-# Use `--docker.nocache` flag to force rebuild.
-RUN uv run consume cache --input "$FIXTURES"
-RUN uv sync
+# the container starts. A local archive copied into the simulator build context is
+# preferred when present; otherwise the configured fixture reference is used.
+RUN fixture_input="$FIXTURES"; \
+    if [ -f "/hive-simulator-input/$FIXTURES" ]; then fixture_input="/hive-simulator-input/$FIXTURES"; fi; \
+    uv run consume cache --input "$fixture_input" && \
+    uv sync
 
 ## Define `consume sync` entry point using the local fixtures
-ENTRYPOINT uv run consume sync -v --input "$FIXTURES"
+ENTRYPOINT ["/bin/sh", "-c", "fixture_input=\"$FIXTURES\"; if [ -f \"/hive-simulator-input/$FIXTURES\" ]; then fixture_input=\"/hive-simulator-input/$FIXTURES\"; fi; exec uv run consume sync -v --input \"$fixture_input\""]
