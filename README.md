@@ -2,35 +2,35 @@
 
 Hive is a system for running integration tests against Sila clients.
 
-Sila Foundation maintains two public Hive instances to check for consensus, p2p and
-blockchain compatibility:
+Sila Hive is maintained as the Sila end-to-end compatibility harness.
 
-- sil1 consensus, EngineAPI, RPC tests, graphql and p2p tests are on <https://hive.silapandaops.io>
+A public Sila Hive deployment is not asserted here until a deployment endpoint is
+independently verified.
 
 **To read more about hive, please check [the documentation][doc].**
 
 ## Trophies
 
-If you find a bug in your client implementation due to this project, please be so kind as
-to add it here to the trophy list. It could help prove that `hive` is indeed a useful tool
-for validating Sila client implementations.
+Historical Hive findings inherited from upstream are preserved with their original
+client repositories. Sila-specific findings should only be added when a corresponding
+Sila issue or pull request actually exists.
 
-- go-sila:
-  - Genesis chain config couldn't handle present but empty settings: [#2790](https://github.com/sila-chain/go-sila/pull/2790)
-  - Data race between remote block import and local block mining: [#2793](https://github.com/sila-chain/go-sila/pull/2793)
-  - Downloader didn't penalize incompatible forks harshly enough: [#2801](https://github.com/sila-chain/go-sila/pull/2801)
+- go-ethereum (upstream history):
+  - Genesis chain config couldn't handle present but empty settings: [#2790](https://github.com/ethereum/go-ethereum/pull/2790)
+  - Data race between remote block import and local block mining: [#2793](https://github.com/ethereum/go-ethereum/pull/2793)
+  - Downloader didn't penalize incompatible forks harshly enough: [#2801](https://github.com/ethereum/go-ethereum/pull/2801)
 - Nethermind:
   - Bug in p2p with bonding nodes algorithm found by Hive: [#1894](https://github.com/NethermindEth/nethermind/pull/1894)
   - Difference in return value for 'r' parameter in getTransactionByHash: [#2372](https://github.com/NethermindEth/nethermind/issues/2372)
   - CREATE/CREATE2 behavior when account already has max nonce [#3698](https://github.com/NethermindEth/nethermind/pull/3698)
   - Blake2 performance issue with non-vectorized code [#3837](https://github.com/NethermindEth/nethermind/pull/3837)
 - Besu:
-  - Missing v result for blob and pending tx [#8196](https://github.com/besu-sil/besu/pull/8196)
-  - SIP-7702 - skip CodeDelegation processing for invalid recid [#8212](https://github.com/besu-sil/besu/pull/8212)
-  - LogTopic - empty list is wildcard topic [#8420](https://github.com/besu-sil/besu/pull/8420)
-  - RLP Block Importer - move worldstate head only if import successful [#8447](https://github.com/besu-sil/besu/pull/8447)
-  - Bug in Bonsai Archive mode when storage to delete could be null: [#8434](https://github.com/besu-sil/besu/pull/8434)
-  - Bug in estimating gas - if no gas params set, tx was being estimated as a FRONTIER tx but should be 1559 [#8472](https://github.com/besu-sil/besu/pull/8472)
+  - Missing v result for blob and pending tx [#8196](https://github.com/besu-eth/besu/pull/8196)
+  - EIP-7702 - skip CodeDelegation processing for invalid recid [#8212](https://github.com/besu-eth/besu/pull/8212)
+  - LogTopic - empty list is wildcard topic [#8420](https://github.com/besu-eth/besu/pull/8420)
+  - RLP Block Importer - move worldstate head only if import successful [#8447](https://github.com/besu-eth/besu/pull/8447)
+  - Bug in Bonsai Archive mode when storage to delete could be null: [#8434](https://github.com/besu-eth/besu/pull/8434)
+  - Bug in estimating gas - if no gas params set, tx was being estimated as a FRONTIER tx but should be 1559 [#8472](https://github.com/besu-eth/besu/pull/8472)
 
 ## Contributions
 
