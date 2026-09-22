@@ -62,7 +62,7 @@ func (cfg *generatorConfig) createChainConfig() *params.ChainConfig {
 	chaincfg.ChainID = chainid
 
 	// Set consensus algorithm.
-	chaincfg.Ethash = new(params.EthashConfig)
+	chaincfg.Silash = new(params.SilashConfig)
 
 	// Apply forks.
 	forks := cfg.forkBlocks()
@@ -75,26 +75,26 @@ func (cfg *generatorConfig) createChainConfig() *params.ChainConfig {
 		switch fork {
 		// number-based forks
 		case "homestead":
-			chaincfg.HomesteadBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaHomesteadBlock = new(big.Int).SetUint64(b)
 		case "tangerinewhistle":
 			chaincfg.SIP150Block = new(big.Int).SetUint64(b)
 		case "spuriousdragon":
 			chaincfg.SIP155Block = new(big.Int).SetUint64(b)
 			chaincfg.SIP158Block = new(big.Int).SetUint64(b)
 		case "byzantium":
-			chaincfg.ByzantiumBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaByzantiumBlock = new(big.Int).SetUint64(b)
 		case "constantinople":
-			chaincfg.ConstantinopleBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaConstantinopleBlock = new(big.Int).SetUint64(b)
 		case "petersburg":
 			chaincfg.PetersburgBlock = new(big.Int).SetUint64(b)
 		case "istanbul":
-			chaincfg.IstanbulBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaIstanbulBlock = new(big.Int).SetUint64(b)
 		case "muirglacier":
 			chaincfg.MuirGlacierBlock = new(big.Int).SetUint64(b)
 		case "berlin":
-			chaincfg.BerlinBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaBerlinBlock = new(big.Int).SetUint64(b)
 		case "london":
-			chaincfg.LondonBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaLondonBlock = new(big.Int).SetUint64(b)
 		case "arrowglacier":
 			chaincfg.ArrowGlacierBlock = new(big.Int).SetUint64(b)
 		case "grayglacier":
@@ -103,15 +103,15 @@ func (cfg *generatorConfig) createChainConfig() *params.ChainConfig {
 			chaincfg.MergeNetsplitBlock = new(big.Int).SetUint64(b)
 		// time-based forks
 		case "shanghai":
-			chaincfg.ShanghaiTime = &timestamp
+			chaincfg.SilaShanghaiTime = &timestamp
 		case "cancun":
-			chaincfg.CancunTime = &timestamp
-			chaincfg.BlobScheduleConfig.Cancun = params.DefaultCancunBlobConfig
+			chaincfg.SilaCancunTime = &timestamp
+			chaincfg.BlobScheduleConfig.SilaCancun = params.DefaultSilaCancunBlobConfig
 		case "prague":
-			chaincfg.PragueTime = &timestamp
-			chaincfg.BlobScheduleConfig.Prague = params.DefaultPragueBlobConfig
+			chaincfg.SilaPragueTime = &timestamp
+			chaincfg.BlobScheduleConfig.SilaPrague = params.DefaultSilaPragueBlobConfig
 		case "osaka":
-			chaincfg.OsakaTime = &timestamp
+			chaincfg.SilaOsakaTime = &timestamp
 		case "bpo1":
 			chaincfg.BPO1Time = &timestamp
 			chaincfg.BlobScheduleConfig.BPO1 = params.DefaultBPO1BlobConfig
@@ -148,7 +148,7 @@ func (cfg *generatorConfig) createGenesis() *core.Genesis {
 	g.ExtraData = []byte("hivechain")
 	g.GasLimit = cfg.gasLimit
 	zero := new(big.Int)
-	if g.Config.IsLondon(zero) {
+	if g.Config.IsSilaLondon(zero) {
 		g.BaseFee = big.NewInt(genesisBaseFee)
 	}
 
