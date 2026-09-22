@@ -21,11 +21,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          go get github.com/sila-chain/go-sila@5ea49e9d531645998680883a003ff8226db825f3
           go mod tidy
-          echo "GO_MOD_TIDY_DIFF_BEGIN"
-          git diff -- go.mod go.sum || true
-          echo "GO_MOD_TIDY_DIFF_END"
+          git diff --exit-code -- go.mod go.sum
           cd cmd/hivechain
           go tool geas -a -bin -o /tmp/calltree.bin contracts/calltree.eas
           size=$(wc -c < /tmp/calltree.bin)
@@ -37,6 +34,3 @@ jobs:
           cmp /tmp/calltree.bin bytecode/calltree.bin
           go build ./...
           go test ./...
-          echo "CALLTREE_BASE64=$(base64 -w0 /tmp/calltree.bin)"
-          echo "GO_MOD_BASE64=$(base64 -w0 ../../go.mod)"
-          echo "GO_SUM_BASE64=$(base64 -w0 ../../go.sum)"
