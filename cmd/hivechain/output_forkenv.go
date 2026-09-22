@@ -66,11 +66,11 @@ func (g *generator) writeForkEnv() error {
 		}
 	}
 	if cfg.BlobScheduleConfig != nil {
-		setBlobConfig("CANCUN", cfg.BlobScheduleConfig.Cancun)
-		setBlobConfig("PRAGUE", cfg.BlobScheduleConfig.Prague)
+		setBlobConfig("CANCUN", cfg.BlobScheduleConfig.SilaCancun)
+		setBlobConfig("PRAGUE", cfg.BlobScheduleConfig.SilaPrague)
 		// Named forks inherit the most recent BPO configuration. Keep exporting
 		// the Osaka aliases for client mappers which still model it explicitly.
-		setBlobConfig("OSAKA", cfg.BlobScheduleConfig.Prague)
+		setBlobConfig("OSAKA", cfg.BlobScheduleConfig.SilaPrague)
 		setBlobConfig("BPO1", cfg.BlobScheduleConfig.BPO1)
 		setBlobConfig("BPO2", cfg.BlobScheduleConfig.BPO2)
 	}
