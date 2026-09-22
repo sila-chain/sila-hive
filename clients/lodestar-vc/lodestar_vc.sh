@@ -10,8 +10,8 @@ mkdir -p /data/secrets
 
 cp /hive/input/config.yaml /data/testnet_setup
 
-echo "${HIVE_SIL2_CONFIG_DEPOSIT_CONTRACT_ADDRESS:-0x1111111111111111111111111111111111111111}" > /data/testnet_setup/deposit_contract.txt
-echo "${HIVE_SIL2_DEPOSIT_DEPLOY_BLOCK_NUMBER:-0}" > /data/testnet_setup/deploy_block.txt
+echo "${HIVE_ETH2_CONFIG_DEPOSIT_CONTRACT_ADDRESS:-0x1111111111111111111111111111111111111111}" > /data/testnet_setup/deposit_contract.txt
+echo "${HIVE_ETH2_DEPOSIT_DEPLOY_BLOCK_NUMBER:-0}" > /data/testnet_setup/deploy_block.txt
 
 for keystore_path in /hive/input/keystores/*
 do
@@ -21,8 +21,8 @@ do
   cp "/hive/input/secrets/$pubkey" "/data/secrets/$pubkey"
 done
 
-metrics_option=$([[ "$HIVE_SIL2_METRICS_PORT" == "" ]] && echo "" || echo "--metrics --metrics.address=$CONTAINER_IP --metrics.port=$HIVE_SIL2_METRICS_PORT")
-builder_option=$([[ "$HIVE_SIL2_BUILDER_ENDPOINT" == "" ]] && echo "--builder.selection executiononly" || echo "--builder")
+metrics_option=$([[ "$HIVE_ETH2_METRICS_PORT" == "" ]] && echo "" || echo "--metrics --metrics.address=$CONTAINER_IP --metrics.port=$HIVE_ETH2_METRICS_PORT")
+builder_option=$([[ "$HIVE_ETH2_BUILDER_ENDPOINT" == "" ]] && echo "--builder.selection executiononly" || echo "--builder")
 echo BUILDER=$builder_option
 
 LOG=info
@@ -45,5 +45,5 @@ node /usr/app/node_modules/.bin/lodestar \
     --secretsDir="/data/secrets" \
     --useProduceBlockV3 \
     $metrics_option $builder_option \
-    --beaconNodes="http://$HIVE_SIL2_BN_API_IP:$HIVE_SIL2_BN_API_PORT"
+    --beaconNodes="http://$HIVE_ETH2_BN_API_IP:$HIVE_ETH2_BN_API_PORT"
 

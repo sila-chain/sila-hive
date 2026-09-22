@@ -9,8 +9,8 @@ mkdir -p /data/validators
 
 cp /hive/input/config.yaml /data/testnet_setup
 
-echo "${HIVE_SIL2_CONFIG_DEPOSIT_CONTRACT_ADDRESS:-0x1111111111111111111111111111111111111111}" > /data/testnet_setup/deposit_contract.txt
-echo "${HIVE_SIL2_DEPOSIT_DEPLOY_BLOCK_NUMBER:-0}" > /data/testnet_setup/deploy_block.txt
+echo "${HIVE_ETH2_CONFIG_DEPOSIT_CONTRACT_ADDRESS:-0x1111111111111111111111111111111111111111}" > /data/testnet_setup/deposit_contract.txt
+echo "${HIVE_ETH2_DEPOSIT_DEPLOY_BLOCK_NUMBER:-0}" > /data/testnet_setup/deploy_block.txt
 
 for keystore_path in /hive/input/keystores/*
 do
@@ -30,7 +30,7 @@ case "$HIVE_LOGLEVEL" in
     5)   LOG=trace ;;
 esac
 
-builder_option=$([[ "$HIVE_SIL2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--builder-proposals")
+builder_option=$([[ "$HIVE_ETH2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--builder-proposals")
 
 lighthouse \
     --debug-level="$LOG" \
@@ -40,6 +40,6 @@ lighthouse \
     --validators-dir="/data/validators" \
     --secrets-dir="/data/secrets" \
     --init-slashing-protection \
-    --beacon-nodes="http://$HIVE_SIL2_BN_API_IP:$HIVE_SIL2_BN_API_PORT" \
+    --beacon-nodes="http://$HIVE_ETH2_BN_API_IP:$HIVE_ETH2_BN_API_PORT" \
     --suggested-fee-recipient="0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b" \
     $builder_option
