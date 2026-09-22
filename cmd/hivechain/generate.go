@@ -213,7 +213,7 @@ func (g *generator) setDifficulty(gen *core.BlockGen) {
 }
 
 func (g *generator) setParentBeaconRoot(gen *core.BlockGen) {
-	if g.genesis.Config.IsCancun(gen.Number(), gen.Timestamp()) {
+	if g.genesis.Config.IsSilaCancun(gen.Number(), gen.Timestamp()) {
 		var h common.Hash
 		g.rand.Read(h[:])
 		gen.SetParentBeaconRoot(h)
