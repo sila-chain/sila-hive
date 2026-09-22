@@ -81,7 +81,7 @@ func (m *modInvokeEmit) apply(ctx *genBlockContext) bool {
 		}
 
 	case types.AccessListTxType:
-		if !ctx.ChainConfig().IsBerlin(ctx.Number()) {
+		if !ctx.ChainConfig().IsSilaBerlin(ctx.Number()) {
 			return false
 		}
 		txdata = &types.AccessListTx{
@@ -100,7 +100,7 @@ func (m *modInvokeEmit) apply(ctx *genBlockContext) bool {
 		}
 
 	case types.DynamicFeeTxType:
-		if !ctx.ChainConfig().IsLondon(ctx.Number()) {
+		if !ctx.ChainConfig().IsSilaLondon(ctx.Number()) {
 			return false
 		}
 		txdata = &types.DynamicFeeTx{
@@ -120,7 +120,7 @@ func (m *modInvokeEmit) apply(ctx *genBlockContext) bool {
 		}
 
 	case types.BlobTxType:
-		if !ctx.ChainConfig().IsCancun(ctx.Number(), ctx.Timestamp()) {
+		if !ctx.ChainConfig().IsSilaCancun(ctx.Number(), ctx.Timestamp()) {
 			return false
 		}
 		var (
