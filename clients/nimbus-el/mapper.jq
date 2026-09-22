@@ -51,7 +51,8 @@ def to_bool:
     "alloc"        : .alloc,
     "baseFeePerGas": .baseFeePerGas,
     "excessBlobGas": .excessBlobGas,
-    "blobGasUsed"  : .blobGasUsed
+    "blobGasUsed"  : .blobGasUsed,
+    "slotNumber"   : .slotNumber
   }|remove_empty,
   "config": {
     "clique": (if env.HIVE_CLIQUE_PERIOD == null then null else {
@@ -61,9 +62,9 @@ def to_bool:
     "homesteadBlock": env.HIVE_FORK_HOMESTEAD|to_int,
     "daoForkBlock": env.HIVE_FORK_DAO_BLOCK|to_int,
     "daoForkSupport": (if env.HIVE_FORK_DAO_BLOCK then env.HIVE_FORK_DAO_VOTE|to_bool else null end),
-    "sip150Block": env.HIVE_FORK_TANGERINE|to_int,
-    "sip155Block": env.HIVE_FORK_SPURIOUS|to_int,
-    "sip158Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip150Block": env.HIVE_FORK_TANGERINE|to_int,
+    "eip155Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip158Block": env.HIVE_FORK_SPURIOUS|to_int,
     "byzantiumBlock": env.HIVE_FORK_BYZANTIUM|to_int,
     "constantinopleBlock": env.HIVE_FORK_CONSTANTINOPLE|to_int,
     "petersburgBlock": env.HIVE_FORK_PETERSBURG|to_int,
@@ -80,6 +81,7 @@ def to_bool:
     "pragueTime": env.HIVE_PRAGUE_TIMESTAMP|to_int,
     "osakaTime": env.HIVE_OSAKA_TIMESTAMP|to_int,
     "amsterdamTime": env.HIVE_AMSTERDAM_TIMESTAMP|to_int,
+    "bogotaTime": env.HIVE_BOGOTA_TIMESTAMP|to_int,
     "blobSchedule": {
       "cancun": {
         "target": (if env.HIVE_CANCUN_BLOB_TARGET then env.HIVE_CANCUN_BLOB_TARGET|to_int else 3 end),
@@ -96,31 +98,31 @@ def to_bool:
         "max": (if env.HIVE_OSAKA_BLOB_MAX then env.HIVE_OSAKA_BLOB_MAX|to_int else 9 end),
         "baseFeeUpdateFraction": (if env.HIVE_OSAKA_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_OSAKA_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 5007716 end)
       },
-      "bpo1": {
+      "bpo1": (if env.HIVE_BPO1_TIMESTAMP then {
         "target": (if env.HIVE_BPO1_BLOB_TARGET then env.HIVE_BPO1_BLOB_TARGET|to_int else 10 end),
         "max": (if env.HIVE_BPO1_BLOB_MAX then env.HIVE_BPO1_BLOB_MAX|to_int else 15 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO1_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO1_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8346193 end)
-      },
-      "bpo2": {
+      } else null end),
+      "bpo2": (if env.HIVE_BPO2_TIMESTAMP then {
         "target": (if env.HIVE_BPO2_BLOB_TARGET then env.HIVE_BPO2_BLOB_TARGET|to_int else 14 end),
         "max": (if env.HIVE_BPO2_BLOB_MAX then env.HIVE_BPO2_BLOB_MAX|to_int else 21 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO2_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO2_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 11684671 end)
-      },
-      "bpo3": {
+      } else null end),
+      "bpo3": (if env.HIVE_BPO3_TIMESTAMP then {
         "target": (if env.HIVE_BPO3_BLOB_TARGET then env.HIVE_BPO3_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO3_BLOB_MAX then env.HIVE_BPO3_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO3_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO3_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      },
-      "bpo4": {
+      } else null end),
+      "bpo4": (if env.HIVE_BPO4_TIMESTAMP then {
         "target": (if env.HIVE_BPO4_BLOB_TARGET then env.HIVE_BPO4_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO4_BLOB_MAX then env.HIVE_BPO4_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO4_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO4_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      },
-      "bpo5": {
+      } else null end),
+      "bpo5": (if env.HIVE_BPO5_TIMESTAMP then {
         "target": (if env.HIVE_BPO5_BLOB_TARGET then env.HIVE_BPO5_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO5_BLOB_MAX then env.HIVE_BPO5_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO5_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO5_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      }
+      } else null end)
     },
     "bpo1Time": env.HIVE_BPO1_TIMESTAMP|to_int,
     "bpo2Time": env.HIVE_BPO2_TIMESTAMP|to_int,
