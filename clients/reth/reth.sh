@@ -11,7 +11,7 @@
 # This script can be configured using the following environment variables:
 #
 #  - HIVE_BOOTNODE             enode URL of the remote bootstrap node
-#  - HIVE_NETWORK_ID           network ID number to use for the sil protocol
+#  - HIVE_NETWORK_ID           network ID number to use for the eth protocol
 #  - HIVE_FORK_HOMESTEAD       block number of the homestead transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transition
 #  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
@@ -21,8 +21,8 @@
 #  - HIVE_FORK_PETERSBURG      block number for ConstantinopleFix/Petersburg transition
 #  - HIVE_FORK_ISTANBUL        block number for Istanbul transition
 #  - HIVE_FORK_MUIR_GLACIER    block number for MuirGlacier transition
-#  - HIVE_SHANGHAI_TIMESTAMP   timestamp for SilaShanghai transition
-#  - HIVE_CANCUN_TIMESTAMP     timestamp for SilaCancun transition
+#  - HIVE_SHANGHAI_TIMESTAMP   timestamp for Shanghai transition
+#  - HIVE_CANCUN_TIMESTAMP     timestamp for Cancun transition
 #  - HIVE_LOGLEVEL             client log level
 #
 # These flags are NOT supported by reth
@@ -50,16 +50,9 @@ case "$HIVE_LOGLEVEL" in
 esac
 
 # Create the data directory.
-DATADIR="/rsil-hive-datadir"
+DATADIR="/reth-hive-datadir"
 mkdir $DATADIR
 FLAGS="$FLAGS --datadir $DATADIR"
-
-# TODO If a specific network ID is requested, use that
-#if [ "$HIVE_NETWORK_ID" != "" ]; then
-#    FLAGS="$FLAGS --networkid $HIVE_NETWORK_ID"
-#else
-#    FLAGS="$FLAGS --networkid 1337"
-#fi
 
 # Configure the chain.
 mv /genesis.json /genesis-input.json
@@ -116,10 +109,15 @@ else
     $reth import $FLAGS "${BLOCKS[-1]}"
 fi
 
-# Only set boot nodes in online steps
-# It doesn't make sense to dial out, use only a pre-set bootnode.
+# Hive provides a direct peer for the online sync tests.
 if [ "$HIVE_BOOTNODE" != "" ]; then
-    FLAGS="$FLAGS --bootnodes=$HIVE_BOOTNODE --trusted-peers=$HIVE_BOOTNODE"
+    FLAGS="$FLAGS --trusted-peers=$HIVE_BOOTNODE --trusted-only --disable-discovery"
+fi
+
+if [ "$HIVE_NETWORK_ID" != "" ]; then
+    FLAGS="$FLAGS --network-id=$HIVE_NETWORK_ID"
+else
+    FLAGS="$FLAGS --network-id=1337"
 fi
 
 # Configure any mining operation
@@ -130,6 +128,9 @@ fi
 #if [ "$HIVE_MINER_EXTRA" != "" ]; then
 #    FLAGS="$FLAGS --miner.extradata $HIVE_MINER_EXTRA"
 #fi
+if [ "$HIVE_TARGET_GAS_LIMIT" != "" ]; then
+    FLAGS="$FLAGS --builder.gaslimit $HIVE_TARGET_GAS_LIMIT"
+fi
 
 # Import clique signing key.
 # TODO
@@ -138,7 +139,7 @@ fi
 #    echo "Importing clique key..."
 #    echo "$HIVE_CLIQUE_PRIVATEKEY" > ./private_key.txt
 #
-#    # Ensure password file is used when running sila in mining mode.
+#    # Ensure password file is used when running geth in mining mode.
 #    if [ "$HIVE_MINER" != "" ]; then
 #        FLAGS="$FLAGS --miner.sigfile private_key.txt"
 #    fi
@@ -153,9 +154,9 @@ if [ -n "${HIVE_CLIQUE_PRIVATEKEY}" ] || [ -n "${HIVE_CLIQUE_PERIOD}" ]; then
 fi
 
 # Configure RPC.
-FLAGS="$FLAGS --http --http.addr=0.0.0.0 --http.api=admin,debug,trace,sil,net,txpool,web3,testing"
-FLAGS="$FLAGS --ws --ws.addr=0.0.0.0 --ws.api=admin,debug,trace,sil,net,txpool,web3,testing"
-FLAGS="$FLAGS --rpc.compute-state-root-for-sil-simulate"
+FLAGS="$FLAGS --http --http.addr=0.0.0.0 --http.api=admin,debug,trace,eth,net,txpool,web3,testing"
+FLAGS="$FLAGS --ws --ws.addr=0.0.0.0 --ws.api=admin,debug,trace,eth,net,txpool,web3,testing"
+FLAGS="$FLAGS --rpc.compute-state-root-for-eth-simulate"
 
 if [ "$HIVE_TERMINAL_TOTAL_DIFFICULTY" != "" ]; then
     JWT_SECRET="7365637265747365637265747365637265747365637265747365637265747365"
@@ -172,4 +173,4 @@ fi
 
 # Launch the main client.
 echo "Running reth with flags: $FLAGS"
-RUST_LOG=info $reth node $FLAGS
+$reth node $FLAGS
