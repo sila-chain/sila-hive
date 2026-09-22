@@ -1,5 +1,0 @@
-silajs-monorepo/packages/sila-tests
-silajs-monorepo/packages/*/node_modules
-silajs-monorepo/packages/vm/benchmarks
-silajs-monorepo/node_modules
-!silajs-monorepo/node_modules/@silajs
