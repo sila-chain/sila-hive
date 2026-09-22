@@ -46,7 +46,7 @@ def pad_storage_keys:
 # Replace config in input.
 . + {
   "config": {
-    "silash": (if env.HIVE_CLIQUE_PERIOD then null else {} end),
+    "ethash": (if env.HIVE_CLIQUE_PERIOD then null else {} end),
     "clique": (if env.HIVE_CLIQUE_PERIOD == null then null else {
       "period": env.HIVE_CLIQUE_PERIOD|to_int,
       "epoch": 30000
@@ -55,10 +55,10 @@ def pad_storage_keys:
     "homesteadBlock": env.HIVE_FORK_HOMESTEAD|to_int,
     "daoForkBlock": env.HIVE_FORK_DAO_BLOCK|to_int,
     "daoForkSupport": env.HIVE_FORK_DAO_VOTE|to_bool,
-    "sip150Block": env.HIVE_FORK_TANGERINE|to_int,
-    "sip150Hash": env.HIVE_FORK_TANGERINE_HASH,
-    "sip155Block": env.HIVE_FORK_SPURIOUS|to_int,
-    "sip158Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip150Block": env.HIVE_FORK_TANGERINE|to_int,
+    "eip150Hash": env.HIVE_FORK_TANGERINE_HASH,
+    "eip155Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip158Block": env.HIVE_FORK_SPURIOUS|to_int,
     "byzantiumBlock": env.HIVE_FORK_BYZANTIUM|to_int,
     "constantinopleBlock": env.HIVE_FORK_CONSTANTINOPLE|to_int,
     "petersburgBlock": env.HIVE_FORK_PETERSBURG|to_int,
@@ -75,6 +75,7 @@ def pad_storage_keys:
     "pragueTime": env.HIVE_PRAGUE_TIMESTAMP|to_int,
     "osakaTime": env.HIVE_OSAKA_TIMESTAMP|to_int,
     "amsterdamTime": env.HIVE_AMSTERDAM_TIMESTAMP|to_int,
+    "bogotaTime": env.HIVE_BOGOTA_TIMESTAMP|to_int,
     "blobSchedule": {
       "cancun": {
         "target": (if env.HIVE_CANCUN_BLOB_TARGET then env.HIVE_CANCUN_BLOB_TARGET|to_int else 3 end),
