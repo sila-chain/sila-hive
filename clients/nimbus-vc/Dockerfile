@@ -1,5 +1,5 @@
 ARG tag=unstable
-ARG baseimage=silapandaops/nimbus-validator-client
+ARG baseimage=ethpandaops/nimbus-validator-client
 
 FROM $baseimage:$tag AS source
 
@@ -10,7 +10,7 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY --from=source /home/user/nimbus-sil2/build/nimbus_validator_client /usr/bin/nimbus_validator_client
+COPY --from=source /home/user/nimbus-eth2/build/nimbus_validator_client /usr/bin/nimbus_validator_client
 
 # Add the startup script.
 ADD nimbus_vc.sh /nimbus_vc.sh

@@ -3,7 +3,7 @@
 FROM debian:buster-slim AS build
 
 ARG tag=unstable
-ARG github=status-im/nimbus-sil2
+ARG github=status-im/nimbus-eth2
 
 RUN apt-get update \
  && apt-get install -y --fix-missing build-essential make git libpcre3-dev librocksdb-dev curl \
@@ -12,7 +12,7 @@ RUN apt-get update \
 
 RUN git clone --recurse-submodules --depth 1 --branch "$tag" https://github.com/$github
 
-WORKDIR /nimbus-sil2
+WORKDIR /nimbus-eth2
 
 RUN NPROC=$(nproc); make -j${NPROC} NIMFLAGS="--parallelBuild:${NPROC}" V=1 update
 

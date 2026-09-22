@@ -24,7 +24,7 @@ done
 ls  /data/validators
 
 # znrt encodes the values of these items between double quotes (""), which is against the spec:
-# https://github.com/sila-chain/consensus-specs/blob/v1.1.10/configs/sila-mainnet.yaml
+# https://github.com/ethereum/consensus-specs/blob/v1.1.10/configs/mainnet.yaml
 sed -i 's/"\([[:digit:]]\+\)"/\1/' /hive/input/config.yaml
 sed -i 's/"\(0x[[:xdigit:]]\+\)"/\1/' /hive/input/config.yaml
 
@@ -41,7 +41,7 @@ case "$HIVE_LOGLEVEL" in
     5)   LOG=trace ;;
 esac
 
-builder_option=$([[ "$HIVE_SIL2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--enable-builder --suggested-fee-recipient=0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b")
+builder_option=$([[ "$HIVE_ETH2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--enable-builder --suggested-fee-recipient=0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b")
 echo BUILDER=$builder_option
 
 echo Starting Prysm Validator Client
@@ -51,7 +51,7 @@ echo Starting Prysm Validator Client
     --accept-terms-of-use=true \
     --prater \
     --enable-beacon-rest-api=true \
-    --beacon-rest-api-provider="http://$HIVE_SIL2_BN_API_IP:${HIVE_SIL2_BN_API_PORT:-4000}" \
+    --beacon-rest-api-provider="http://$HIVE_ETH2_BN_API_IP:${HIVE_ETH2_BN_API_PORT:-4000}" \
     --datadir="/data/vc" \
     --wallet-dir="/data/validators" \
     --wallet-password-file="/wallet.pass" \
