@@ -29,7 +29,7 @@ func (m *modRequestWithdrawal) apply(ctx *genBlockContext) bool {
 	if m.info != nil {
 		return false // run only once
 	}
-	if !ctx.ChainConfig().IsPrague(ctx.Number(), ctx.Timestamp()) {
+	if !ctx.ChainConfig().IsSilaPrague(ctx.Number(), ctx.Timestamp()) {
 		return false
 	}
 
