@@ -21,7 +21,7 @@ type withdrawalsInfo struct {
 }
 
 func (m *modWithdrawals) apply(ctx *genBlockContext) bool {
-	if !ctx.ChainConfig().IsShanghai(ctx.Number(), ctx.Timestamp()) {
+	if !ctx.ChainConfig().IsSilaShanghai(ctx.Number(), ctx.Timestamp()) {
 		return false
 	}
 	info := m.info[ctx.NumberU64()]
