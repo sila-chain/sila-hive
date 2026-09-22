@@ -9,7 +9,7 @@ import (
 	"github.com/sila-chain/go-sila/beacon/engine"
 	"github.com/sila-chain/go-sila/common"
 	"github.com/sila-chain/go-sila/core/types"
-	"github.com/sila-chain/go-sila/silclient"
+	"github.com/sila-chain/go-sila/ethclient"
 	"github.com/sila-chain/sila-hive/hivesim"
 )
 
@@ -32,6 +32,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	snapParams := params.Set("HIVE_NODETYPE", "snap")
+	fullParams := params.Set("HIVE_NODETYPE", "full")
 
 	// Run snap sync tests.
 	var snapSuite = hivesim.Suite{
@@ -40,18 +42,17 @@ func main() {
 Each client runs as a source for all other clients (including itself).`,
 	}
 	snapSuite.Add(hivesim.ClientTestSpec{
-		Role:        "sil1_snap",
+		Role:        "eth1_snap",
 		Name:        "CLIENT as snap-sync server",
 		Description: "This loads the test chain into the client and verifies whether it was imported correctly.",
-		Parameters:  params,
+		Parameters:  snapParams,
 		Files:       sourceFiles,
 		Run: func(t *hivesim.T, c *hivesim.Client) {
-			params = params.Set("HIVE_NODETYPE", "snap")
-			runSourceTest(t, c, "sil1_snap", params)
+			runSourceTest(t, c, "eth1_snap", snapParams)
 		},
 	})
 	sim := hivesim.New()
-	snapClients, _ := sim.ClientsWithRole("sil1_snap")
+	snapClients, _ := sim.ClientsWithRole("eth1_snap")
 	if len(snapClients) > 0 {
 		hivesim.MustRunSuite(hivesim.New(), snapSuite)
 	}
@@ -66,11 +67,10 @@ Each client runs as a source for all other clients (including itself).`,
 		Role:        "sil1",
 		Name:        "CLIENT as sync server",
 		Description: "This loads the test chain into the client and verifies whether it was imported correctly.",
-		Parameters:  params,
+		Parameters:  fullParams,
 		Files:       sourceFiles,
 		Run: func(t *hivesim.T, c *hivesim.Client) {
-			params = params.Set("HIVE_NODETYPE", "full")
-			runSourceTest(t, c, "sil1", params)
+			runSourceTest(t, c, "sil1", fullParams)
 		},
 	})
 	hivesim.MustRunSuite(hivesim.New(), fullSuite)
@@ -94,7 +94,7 @@ func runSourceTest(t *hivesim.T, c *hivesim.Client, role string, params hivesim.
 	if err != nil {
 		t.Fatal("can't get node peer-to-peer endpoint:", enode)
 	}
-	sinkParams := params.Set("HIVE_BOOTNODE", enode)
+	sinkParams := params.Set("HIVE_BOOTNODE", enode).Set("HIVE_CHECK_LIVE_PORT", "8551")
 
 	// Sync all sink nodes against the source.
 	t.RunAllClients(hivesim.ClientTestSpec{
@@ -220,7 +220,7 @@ func (n *node) checkHead() error {
 // head returns the node's chain head.
 func (n *node) head() (*types.Header, error) {
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	return silclient.NewClient(n.RPC()).HeaderByNumber(ctx, nil)
+	return ethclient.NewClient(n.RPC()).HeaderByNumber(ctx, nil)
 }
 
 func conv2any[T any](s []T) []any {
