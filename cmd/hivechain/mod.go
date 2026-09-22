@@ -9,6 +9,7 @@ import (
 	"github.com/sila-chain/go-sila/core"
 	"github.com/sila-chain/go-sila/core/types"
 	"github.com/sila-chain/go-sila/params"
+	"github.com/holiman/uint256"
 )
 
 type blockModifier interface {
@@ -69,11 +70,16 @@ func (ctx *genBlockContext) TxSenderAccount() *genAccount {
 
 // TxCreateIntrinsicGas gives the 'intrinsic gas' of a contract creation transaction.
 func (ctx *genBlockContext) TxCreateIntrinsicGas(data []byte) uint64 {
-	genesis := ctx.gen.genesis
-	isHomestead := genesis.Config.IsHomestead(ctx.block.Number())
-	isSIP2028 := genesis.Config.IsIstanbul(ctx.block.Number())
-	isSIP3860 := genesis.Config.IsShanghai(ctx.block.Number(), ctx.block.Timestamp())
-	igas, err := core.IntrinsicGas(data, nil, nil, true, isHomestead, isSIP2028, isSIP3860)
+	rules := ctx.ChainConfig().Rules(ctx.Number(), true, ctx.Timestamp())
+	igas, err := core.IntrinsicGas(
+		data,
+		nil,
+		nil,
+		ctx.TxSenderAccount().addr,
+		nil,
+		uint256.NewInt(0),
+		rules,
+	)
 	if err != nil {
 		panic(err)
 	}

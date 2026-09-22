@@ -28,11 +28,12 @@ type generatorConfig struct {
 	merged       bool   // create a proof-of-stake chain
 
 	// chain options
-	txInterval        int    // frequency of blocks containing transactions
-	txCount           int    // number of txs in block
-	chainLength       int    // number of generated blocks
-	gasLimit          uint64 // block gas limit
-	finalizedDistance int    // distance of finalized block from head
+	txInterval        int      // frequency of blocks containing transactions
+	txCount           int      // number of txs in block
+	chainLength       int      // number of generated blocks
+	gasLimit          uint64   // block gas limit
+	finalizedDistance int      // distance of finalized block from head
+	disabledMods      []string // tx modifiers to skip
 
 	// output options
 	outputs   []string // enabled outputs
@@ -99,6 +100,9 @@ func newGenerator(cfg generatorConfig) *generator {
 
 func (cfg *generatorConfig) createBlockModifiers() (list []*modifierInstance) {
 	for name, new := range modRegistry {
+		if slices.Contains(cfg.disabledMods, name) {
+			continue
+		}
 		list = append(list, &modifierInstance{
 			name:          name,
 			blockModifier: new(),
@@ -128,6 +132,14 @@ func (g *generator) run() error {
 	// Import the chain. This runs all block validation rules.
 	bc, err := g.importChain(engine, chain)
 	if err != nil {
+		// The regular output stage doesn't run when import fails, so dump the access
+		// lists of the generated blocks here. Note these are the lists produced by
+		// block assembly, not the ones recomputed by the failing import.
+		if slices.Contains(g.cfg.outputs, "bal") {
+			if derr := g.dumpBlockAccessLists(chain); derr != nil {
+				fmt.Println("warning: can't write block access lists:", derr)
+			}
+		}
 		return err
 	}
 
