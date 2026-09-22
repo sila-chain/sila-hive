@@ -21,6 +21,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          go get github.com/sila-chain/go-sila@5ea49e9d531645998680883a003ff8226db825f3
           go mod tidy
           echo "GO_MOD_TIDY_DIFF_BEGIN"
           git diff -- go.mod go.sum || true
