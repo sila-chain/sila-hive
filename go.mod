@@ -38,7 +38,7 @@ require (
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/emicklei/dot v1.6.2 // indirect
 	github.com/sila-chain/c-kzg-4844/v2 v2.1.8 // indirect
-	github.com/sila-chain/go-bigmodexpfix v0.0.0-20250911101455-f9e208c548ab // indirect
+	github.com/sila-chain/go-bigmodexpfix v0.0.1 // indirect
 	github.com/sila-chain/go-verkle v0.2.2 // indirect
 	github.com/ferranbt/fastssz v0.1.4 // indirect
 	github.com/fjl/geas v0.3.0 // indirect
