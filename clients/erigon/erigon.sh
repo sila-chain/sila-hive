@@ -11,7 +11,7 @@
 # This script can be configured using the following environment variables:
 #
 #  - HIVE_BOOTNODE             enode URL of the remote bootstrap node
-#  - HIVE_NETWORK_ID           network ID number to use for the sil protocol
+#  - HIVE_NETWORK_ID           network ID number to use for the eth protocol
 #  - HIVE_FORK_HOMESTEAD       block number of the homestead transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transition
 #  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
@@ -107,12 +107,15 @@ fi
 set -e
 
 # Configure any mining operation
-# TODO: Erigon doesn't have inbuilt cpu miner. Need to add https://github.com/panglove/ethcpuminer/tree/master/silash for cpu mining with erigon
+# TODO: Erigon doesn't have inbuilt cpu miner. Need to add https://github.com/panglove/ethcpuminer/tree/master/ethash for cpu mining with erigon
 if [ "$HIVE_MINER" != "" ]; then
     FLAGS="$FLAGS --mine --miner.etherbase $HIVE_MINER"
 fi
 if [ "$HIVE_MINER_EXTRA" != "" ]; then
     FLAGS="$FLAGS --miner.extradata $HIVE_MINER_EXTRA"
+fi
+if [ "$HIVE_TARGET_GAS_LIMIT" != "" ]; then
+    FLAGS="$FLAGS --miner.gaslimit $HIVE_TARGET_GAS_LIMIT"
 fi
 
 # Import clique signing key.
@@ -121,14 +124,14 @@ if [ "$HIVE_CLIQUE_PRIVATEKEY" != "" ]; then
     echo "Importing clique key..."
     echo "$HIVE_CLIQUE_PRIVATEKEY" > ./private_key.txt
 
-    # Ensure password file is used when running sila in mining mode.
+    # Ensure password file is used when running geth in mining mode.
     if [ "$HIVE_MINER" != "" ]; then
         FLAGS="$FLAGS --miner.sigfile private_key.txt"
     fi
 fi
 
 # Configure RPC.
-FLAGS="$FLAGS --http --http.addr=0.0.0.0 --http.api=admin,debug,trace,sil,net,txpool,web3,testing"
+FLAGS="$FLAGS --http --http.addr=0.0.0.0 --http.api=admin,debug,trace,eth,net,txpool,web3,testing"
 FLAGS="$FLAGS --ws --ws.port=8546"
 
 # Configure GraphQL.

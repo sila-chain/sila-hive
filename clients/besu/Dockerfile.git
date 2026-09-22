@@ -4,7 +4,7 @@
 FROM ubuntu:24.04 AS builder
 
 ARG tag=main
-ARG github=besu-sil/besu
+ARG github=besu-eth/besu
 
 RUN echo "installing java on ubuntu base image" \
     && apt-get update && apt-get install -y git libsodium-dev libnss3-dev \

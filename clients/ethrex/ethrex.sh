@@ -57,7 +57,7 @@ fi
 # (e.g. EEST consume-rlp fork-transition tests) deliberately include
 # rejected blocks alongside valid ones, and ethrex's `import` aborts the
 # whole chain on the first failure. Looping here keeps `import` strict
-# while still applying later valid blocks. Mirrors erigon/silajs/nimbus.
+# while still applying later valid blocks. Mirrors erigon/ethereumjs/nimbus.
 if [ -d /blocks ]; then
     echo "Loading remaining individual blocks..."
     for file in $(ls /blocks | sort -n); do
@@ -95,6 +95,9 @@ if [ "$HIVE_MINER_EXTRA" != "" ]; then
     echo "Warning: miner extra data not supported."
     exit 1
 fi
+if [ "$HIVE_TARGET_GAS_LIMIT" != "" ]; then
+    FLAGS="$FLAGS --builder.gas-limit $HIVE_TARGET_GAS_LIMIT"
+fi
 
 # Import clique signing key.
 if [ "$HIVE_CLIQUE_PRIVATEKEY" != "" ]; then
@@ -104,12 +107,12 @@ fi
 
 # Configure RPC.
 # Hive tests exercise admin/debug/txpool namespaces over the public HTTP port.
-# Newer ethrex builds default the HTTP allowlist to sil,net,web3, so we have to
+# Newer ethrex builds default the HTTP allowlist to eth,net,web3, so we have to
 # opt those namespaces in via --http.api. Older builds don't know that flag, so
 # probe --help to keep this launcher working against both.
 HTTP_API_FLAG=""
 if "$ethrex" --help 2>&1 | grep -q -- '--http.api'; then
-    HTTP_API_FLAG="--http.api=sil,net,web3,debug,admin,txpool"
+    HTTP_API_FLAG="--http.api=eth,net,web3,debug,admin,txpool"
 fi
 FLAGS="$FLAGS --http.addr=0.0.0.0 --authrpc.addr=0.0.0.0 $HTTP_API_FLAG"
 
