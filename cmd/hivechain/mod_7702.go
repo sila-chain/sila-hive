@@ -49,7 +49,7 @@ const (
 )
 
 func (m *mod7702) apply(ctx *genBlockContext) bool {
-	if !ctx.ChainConfig().IsPrague(ctx.Number(), ctx.Timestamp()) {
+	if !ctx.ChainConfig().IsSilaPrague(ctx.Number(), ctx.Timestamp()) {
 		return false
 	}
 
