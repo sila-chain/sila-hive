@@ -1,5 +1,5 @@
 ARG tag=master
-ARG baseimage=statusim/nimbus-sil1
+ARG baseimage=statusim/nimbus-eth1
 
 FROM $baseimage:$tag AS source
 
@@ -14,7 +14,7 @@ RUN apt-get clean \
 
 RUN ldd --version
 
-COPY --from=source /home/user/nimbus-sil1/build/nimbus /usr/bin/nimbus
+COPY --from=source /home/user/nimbus-eth1/build/nimbus /usr/bin/nimbus
 
 RUN usr/bin/nimbus --version > /version.txt
 

@@ -4,7 +4,7 @@
 ## Builder stage: Compiles shisui from a git repository
 FROM golang:1.24.2 AS builder
 
-ARG github=zen-sil/shisui
+ARG github=zen-eth/shisui
 ARG tag=main
 ARG GOPROXY
 ENV GOPROXY=${GOPROXY}

@@ -43,7 +43,7 @@ var (
 )
 
 // Execution specification reference:
-// https://github.com/sila-chain/execution-apis/blob/main/src/engine/specification.md
+// https://github.com/ethereum/execution-apis/blob/main/src/engine/specification.md
 
 // List of all withdrawals tests
 var Tests = []test.Spec{
@@ -506,7 +506,7 @@ var Tests = []test.Spec{
 	},
 	// TODO: REORG SYNC WHERE SYNCED BLOCKS HAVE WITHDRAWALS BEFORE TIME
 
-	// SAVM Tests (SIP-3651, SIP-3855, SIP-3860)
+	// EVM Tests (SIP-3651, SIP-3855, SIP-3860)
 	&MaxInitcodeSizeSpec{
 		WithdrawalsBaseSpec: &WithdrawalsBaseSpec{
 			BaseSpec: test.BaseSpec{
@@ -887,8 +887,8 @@ func (wh WithdrawalsHistory) VerifyWithdrawals(block uint64, rpcBlock *big.Int, 
 		r := testEngine.TestBalanceAt(account, rpcBlock)
 		r.ExpectBalanceEqual(expectedBalance)
 		// All withdrawals account have a bytecode that unconditionally set the
-		// zero storage key to one on SAVM execution.
-		// Withdrawals must not trigger SAVM so we expect zero.
+		// zero storage key to one on EVM execution.
+		// Withdrawals must not trigger EVM so we expect zero.
 		s := testEngine.TestStorageAt(account, common.BigToHash(common.Big0), rpcBlock)
 		s.ExpectBigIntStorageEqual(common.Big0)
 	}
@@ -933,7 +933,7 @@ func (ws *WithdrawalsBaseSpec) GetWithdrawalsGenesisTimeDelta() uint64 {
 	return ws.WithdrawalsForkHeight * ws.GetBlockTimeIncrements()
 }
 
-// Calculates SilaShanghai fork timestamp given the amount of blocks that need to be
+// Calculates Shanghai fork timestamp given the amount of blocks that need to be
 // produced beforehand.
 func (ws *WithdrawalsBaseSpec) GetWithdrawalsForkTime() uint64 {
 	return uint64(globals.GenesisTimestamp) + ws.GetWithdrawalsGenesisTimeDelta()
@@ -1039,11 +1039,11 @@ func (ws *WithdrawalsBaseSpec) VerifyContractsStorage(t *test.Env) {
 	r := t.TestEngine.TestStorageAt(WARM_COINBASE_ADDRESS, common.BigToHash(latestPayloadNumberBig), latestPayloadNumberBig)
 	p := t.TestEngine.TestStorageAt(PUSH0_ADDRESS, common.Hash{}, latestPayloadNumberBig)
 	if latestPayloadNumber >= ws.WithdrawalsForkHeight {
-		// SilaShanghai
+		// Shanghai
 		r.ExpectBigIntStorageEqual(big.NewInt(100))        // WARM_STORAGE_READ_COST
 		p.ExpectBigIntStorageEqual(latestPayloadNumberBig) // tx succeeded
 	} else {
-		// Pre-SilaShanghai
+		// Pre-Shanghai
 		r.ExpectBigIntStorageEqual(big.NewInt(2600)) // COLD_ACCOUNT_ACCESS_COST
 		p.ExpectBigIntStorageEqual(big.NewInt(0))    // tx must've failed
 	}
@@ -1052,6 +1052,7 @@ func (ws *WithdrawalsBaseSpec) VerifyContractsStorage(t *test.Env) {
 // Changes the CL Mocker default time increments of 1 to the value specified
 // in the test spec.
 func (ws *WithdrawalsBaseSpec) ConfigureCLMock(cl *clmock.CLMocker) {
+	ws.BaseSpec.ConfigureCLMock(cl)
 	cl.BlockTimestampIncrement = big.NewInt(int64(ws.GetBlockTimeIncrements()))
 }
 
@@ -1116,7 +1117,7 @@ func (ws *WithdrawalsBaseSpec) Execute(t *test.Env) {
 	// Create the withdrawals history object
 	ws.WithdrawalsHistory = make(WithdrawalsHistory)
 
-	// Check if we have pre-SilaShanghai blocks
+	// Check if we have pre-Shanghai blocks
 	if ws.GetWithdrawalsForkTime() > uint64(globals.GenesisTimestamp) {
 		// Check `latest` during all pre-shanghai blocks, none should
 		// contain `withdrawalsRoot`, including genesis.
@@ -1167,7 +1168,7 @@ func (ws *WithdrawalsBaseSpec) Execute(t *test.Env) {
 
 			if !ws.SkipBaseVerifications {
 				// Try to send a ForkchoiceUpdatedV2 with non-null
-				// withdrawals before SilaShanghai
+				// withdrawals before Shanghai
 				r := t.TestEngine.TestEngineForkchoiceUpdatedV2(
 					&beacon.ForkchoiceStateV1{
 						HeadBlockHash: t.CLMock.LatestHeader.Hash(),
@@ -1182,7 +1183,7 @@ func (ws *WithdrawalsBaseSpec) Execute(t *test.Env) {
 				r.ExpectationDescription = "Sent pre-shanghai Forkchoice using ForkchoiceUpdatedV2 + Withdrawals, error is expected"
 				r.ExpectErrorCode(*globals.INVALID_PAYLOAD_ATTRIBUTES)
 
-				// Send a valid Pre-SilaShanghai request using ForkchoiceUpdatedV2
+				// Send a valid Pre-Shanghai request using ForkchoiceUpdatedV2
 				// (CLMock uses V1 by default)
 				r = t.TestEngine.TestEngineForkchoiceUpdatedV2(
 					&beacon.ForkchoiceStateV1{
@@ -1227,7 +1228,7 @@ func (ws *WithdrawalsBaseSpec) Execute(t *test.Env) {
 		OnNewPayloadBroadcast: func() {
 			if !ws.SkipBaseVerifications {
 				// We sent a pre-shanghai FCU.
-				// Keep expecting `nil` until SilaShanghai.
+				// Keep expecting `nil` until Shanghai.
 				r := t.TestEngine.TestHeaderByNumber(nil)
 				r.ExpectationDescription = fmt.Sprintf(`
 				Requested "latest" block expecting block to contain
@@ -1257,7 +1258,7 @@ func (ws *WithdrawalsBaseSpec) Execute(t *test.Env) {
 
 			if !ws.SkipBaseVerifications {
 				// Try to send a PayloadAttributesV1 with null withdrawals after
-				// SilaShanghai
+				// Shanghai
 				r := t.TestEngine.TestEngineForkchoiceUpdatedV2(
 					&beacon.ForkchoiceStateV1{
 						HeadBlockHash: t.CLMock.LatestHeader.Hash(),
@@ -1797,9 +1798,9 @@ func (ws *WithdrawalsReorgSpec) Execute(t *test.Env) {
 	r.ExpectPayloadStatus(test.Valid)
 }
 
-// SIP-3860 SilaShanghai Tests:
+// SIP-3860 Shanghai Tests:
 // Send transactions overflowing the MAX_INITCODE_SIZE
-// limit set in SIP-3860, before and after the SilaShanghai
+// limit set in SIP-3860, before and after the Shanghai
 // fork.
 type MaxInitcodeSizeSpec struct {
 	*WithdrawalsBaseSpec
@@ -1837,24 +1838,24 @@ func (s *MaxInitcodeSizeSpec) Execute(t *test.Env) {
 			}
 			err = t.Engine.SendTransaction(t.TestContext, tx)
 			if err != nil {
-				t.Fatalf("FAIL: Error sending max initcode transaction before SilaShanghai: %v", err)
+				t.Fatalf("FAIL: Error sending max initcode transaction before Shanghai: %v", err)
 			}
 		}
 	}
 
-	// Produce all blocks needed to reach SilaShanghai
-	t.Logf("INFO: Blocks until SilaShanghai=%d", s.GetPreWithdrawalsBlockCount())
+	// Produce all blocks needed to reach Shanghai
+	t.Logf("INFO: Blocks until Shanghai=%d", s.GetPreWithdrawalsBlockCount())
 	txIncluded := uint64(0)
 	t.CLMock.ProduceBlocks(int(s.GetPreWithdrawalsBlockCount()), clmock.BlockProcessCallbacks{
 		OnGetPayload: func() {
-			t.Logf("INFO: Got Pre-SilaShanghai block=%d", t.CLMock.LatestPayloadBuilt.Number)
+			t.Logf("INFO: Got Pre-Shanghai block=%d", t.CLMock.LatestPayloadBuilt.Number)
 			txIncluded += uint64(len(t.CLMock.LatestPayloadBuilt.Transactions))
 		},
 	})
 
 	// Check how many transactions were included
 	if txIncluded == 0 && s.OverflowMaxInitcodeTxCountBeforeFork > 0 {
-		t.Fatalf("FAIL: No max initcode txs included before SilaShanghai. Txs must have been included before the MAX_INITCODE_SIZE limit was enabled")
+		t.Fatalf("FAIL: No max initcode txs included before Shanghai. Txs must have been included before the MAX_INITCODE_SIZE limit was enabled")
 	}
 
 	// Create a payload, no txs should be included

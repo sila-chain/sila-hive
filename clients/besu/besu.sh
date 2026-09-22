@@ -8,8 +8,8 @@
 # This script assumes the following environment variables:
 #
 #  - HIVE_BOOTNODE             enode URL of the remote bootstrap node
-#  - HIVE_NETWORK_ID           network ID number to use for the sil protocol
-#  - HIVE_CHAIN_ID             network ID number to use for the sil protocol
+#  - HIVE_NETWORK_ID           network ID number to use for the eth protocol
+#  - HIVE_CHAIN_ID             network ID number to use for the eth protocol
 #  - HIVE_NODETYPE             sync and pruning selector (archive, full, light)
 #
 # Forks:
@@ -46,7 +46,7 @@ set -e
 
 besu=/opt/besu/bin/besu
 
-# See https://github.com/besu-sil/besu/issues/1464
+# See https://github.com/besu-eth/besu/issues/1464
 export BESU_OPTS="-Dsecp256k1.randomize=false"
 
 # Use bonsai storage.
@@ -99,7 +99,7 @@ fi
 if [ -d /blocks ]; then
     HAS_IMPORT=1
     blocks=`echo /blocks/* | sort -n`
-    # See https://github.com/besu-sil/besu/issues/1992#issuecomment-796528168
+    # See https://github.com/besu-eth/besu/issues/1992#issuecomment-796528168
     # We import and run Besu in one go, to not have to instantiate the JRE twice.
     # However, besu has some special logic, and if only one file is imported, it
     # exits if that file fails to import.
@@ -122,11 +122,15 @@ fi
 if [ "$HIVE_MINER_EXTRA" != "" ]; then
     FLAGS="$FLAGS --miner-extra-data=$HIVE_MINER_EXTRA"
 fi
+if [ "$HIVE_TARGET_GAS_LIMIT" != "" ]; then
+    FLAGS="$FLAGS --target-gas-limit=$HIVE_TARGET_GAS_LIMIT"
+fi
 FLAGS="$FLAGS --min-gas-price=1 --tx-pool-price-bump=0 --rpc-gas-cap=50000000"
 
 # Configure peer-to-peer networking.
 if [ "$HIVE_BOOTNODE" != "" ]; then
-    FLAGS="$FLAGS --bootnodes=$HIVE_BOOTNODE"
+    printf '["%s"]\n' "$HIVE_BOOTNODE" > /static-nodes.json
+    FLAGS="$FLAGS --discovery-enabled=false --static-nodes-file=/static-nodes.json"
 fi
 if [ "$HIVE_NETWORK_ID" != "" ]; then
     FLAGS="$FLAGS --network-id=$HIVE_NETWORK_ID"
@@ -134,7 +138,7 @@ else
     FLAGS="$FLAGS --network-id=1337"
 fi
 
-# Configure sync mode
+# Configure sync mode for Hive's single-peer topology.
 case "$HIVE_NODETYPE" in
     "" | "full" | "archive")
         syncmode=FULL ;;
@@ -145,6 +149,9 @@ case "$HIVE_NODETYPE" in
         exit 1 ;;
 esac
 FLAGS="$FLAGS --sync-mode=$syncmode"
+if [ "$syncmode" = "SNAP" ]; then
+    FLAGS="$FLAGS --sync-min-peers=1"
+fi
 
 # Enable Snap Server.
 FLAGS="$FLAGS --snapsync-server-enabled"
@@ -152,13 +159,13 @@ FLAGS="$FLAGS --snapsync-server-enabled"
 # Configure RPC.
 RPCFLAGS="--host-allowlist=*"
 if [ "$HIVE_GRAPHQL_ENABLED" == "" ]; then
-    RPCFLAGS="$RPCFLAGS --rpc-http-enabled --rpc-http-api=DEBUG,TRACE,SIL,NET,TXPOOL,WEB3,ADMIN,TESTING --rpc-http-host=0.0.0.0"
+    RPCFLAGS="$RPCFLAGS --rpc-http-enabled --rpc-http-api=DEBUG,TRACE,ETH,NET,TXPOOL,WEB3,ADMIN,TESTING --rpc-http-host=0.0.0.0"
 else
     RPCFLAGS="$RPCFLAGS --graphql-http-enabled --graphql-http-host=0.0.0.0 --graphql-http-port=8545"
 fi
 
 # Enable WebSocket.
-RPCFLAGS="$RPCFLAGS --rpc-ws-enabled --rpc-ws-api=DEBUG,TRACE,SIL,NET,TXPOOL,WEB3,ADMIN,TESTING --rpc-ws-host=0.0.0.0"
+RPCFLAGS="$RPCFLAGS --rpc-ws-enabled --rpc-ws-api=DEBUG,TRACE,ETH,NET,TXPOOL,WEB3,ADMIN,TESTING --rpc-ws-host=0.0.0.0"
 
 # Enable merge support if needed
 if [ "$HIVE_TERMINAL_TOTAL_DIFFICULTY" != "" ]; then

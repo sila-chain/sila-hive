@@ -20,7 +20,7 @@ const (
 	defaultGasLimit = 100_000_000
 )
 
-// Sila sila-mainnet forks in order of introduction.
+// Sila mainnet forks in order of introduction.
 var (
 	allForkNames = append(preMergeForkNames, posForkNames...)
 	lastFork     = allForkNames[len(allForkNames)-1]
@@ -48,6 +48,9 @@ var (
 		"cancun",
 		"prague",
 		"osaka",
+		"bpo1",
+		"bpo2",
+		"amsterdam",
 	}
 )
 
@@ -72,26 +75,26 @@ func (cfg *generatorConfig) createChainConfig() *params.ChainConfig {
 		switch fork {
 		// number-based forks
 		case "homestead":
-			chaincfg.HomesteadBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaHomesteadBlock = new(big.Int).SetUint64(b)
 		case "tangerinewhistle":
 			chaincfg.SIP150Block = new(big.Int).SetUint64(b)
 		case "spuriousdragon":
 			chaincfg.SIP155Block = new(big.Int).SetUint64(b)
 			chaincfg.SIP158Block = new(big.Int).SetUint64(b)
 		case "byzantium":
-			chaincfg.ByzantiumBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaByzantiumBlock = new(big.Int).SetUint64(b)
 		case "constantinople":
-			chaincfg.ConstantinopleBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaConstantinopleBlock = new(big.Int).SetUint64(b)
 		case "petersburg":
 			chaincfg.PetersburgBlock = new(big.Int).SetUint64(b)
 		case "istanbul":
-			chaincfg.IstanbulBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaIstanbulBlock = new(big.Int).SetUint64(b)
 		case "muirglacier":
 			chaincfg.MuirGlacierBlock = new(big.Int).SetUint64(b)
 		case "berlin":
-			chaincfg.BerlinBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaBerlinBlock = new(big.Int).SetUint64(b)
 		case "london":
-			chaincfg.LondonBlock = new(big.Int).SetUint64(b)
+			chaincfg.SilaLondonBlock = new(big.Int).SetUint64(b)
 		case "arrowglacier":
 			chaincfg.ArrowGlacierBlock = new(big.Int).SetUint64(b)
 		case "grayglacier":
@@ -100,16 +103,23 @@ func (cfg *generatorConfig) createChainConfig() *params.ChainConfig {
 			chaincfg.MergeNetsplitBlock = new(big.Int).SetUint64(b)
 		// time-based forks
 		case "shanghai":
-			chaincfg.ShanghaiTime = &timestamp
+			chaincfg.SilaShanghaiTime = &timestamp
 		case "cancun":
-			chaincfg.CancunTime = &timestamp
-			chaincfg.BlobScheduleConfig.SilaCancun = params.DefaultCancunBlobConfig
+			chaincfg.SilaCancunTime = &timestamp
+			chaincfg.BlobScheduleConfig.SilaCancun = params.DefaultSilaCancunBlobConfig
 		case "prague":
-			chaincfg.PragueTime = &timestamp
-			chaincfg.BlobScheduleConfig.SilaPrague = params.DefaultPragueBlobConfig
+			chaincfg.SilaPragueTime = &timestamp
+			chaincfg.BlobScheduleConfig.SilaPrague = params.DefaultSilaPragueBlobConfig
 		case "osaka":
-			chaincfg.OsakaTime = &timestamp
-			chaincfg.BlobScheduleConfig.SilaOsaka = params.DefaultOsakaBlobConfig
+			chaincfg.SilaOsakaTime = &timestamp
+		case "bpo1":
+			chaincfg.BPO1Time = &timestamp
+			chaincfg.BlobScheduleConfig.BPO1 = params.DefaultBPO1BlobConfig
+		case "bpo2":
+			chaincfg.BPO2Time = &timestamp
+			chaincfg.BlobScheduleConfig.BPO2 = params.DefaultBPO2BlobConfig
+		case "amsterdam":
+			chaincfg.AmsterdamTime = &timestamp
 		default:
 			panic(fmt.Sprintf("unknown fork name %q", fork))
 		}
@@ -138,7 +148,7 @@ func (cfg *generatorConfig) createGenesis() *core.Genesis {
 	g.ExtraData = []byte("hivechain")
 	g.GasLimit = cfg.gasLimit
 	zero := new(big.Int)
-	if g.Config.IsLondon(zero) {
+	if g.Config.IsSilaLondon(zero) {
 		g.BaseFee = big.NewInt(genesisBaseFee)
 	}
 
@@ -150,6 +160,7 @@ func (cfg *generatorConfig) createGenesis() *core.Genesis {
 	}
 	addCancunSystemContracts(g.Alloc)
 	addPragueSystemContracts(g.Alloc)
+	addAmsterdamSystemContracts(g.Alloc)
 	addSnapTestContract(g.Alloc)
 	addModContracts(g.Alloc)
 
@@ -169,6 +180,16 @@ func addPragueSystemContracts(ga types.GenesisAlloc) {
 	ga[params.ConsolidationQueueAddress] = types.Account{Balance: big.NewInt(1), Code: params.ConsolidationQueueCode}
 }
 
+func addAmsterdamSystemContracts(ga types.GenesisAlloc) {
+	ga[params.BuilderDepositAddress] = types.Account{Balance: big.NewInt(1), Code: params.BuilderDepositCode}
+	ga[params.BuilderExitAddress] = types.Account{Balance: big.NewInt(1), Code: params.BuilderExitCode}
+	ga[params.DeterministicFactoryAddress] = types.Account{
+		Balance: new(big.Int),
+		Nonce:   1,
+		Code:    params.DeterministicFactoryCode,
+	}
+}
+
 func addSnapTestContract(ga types.GenesisAlloc) {
 	addr := common.HexToAddress("0x8bebc8ba651aee624937e7d897853ac30c95a067")
 	h := common.HexToHash
@@ -186,6 +207,14 @@ func addSnapTestContract(ga types.GenesisAlloc) {
 const (
 	emitAddr      = "0x7dcd17433742f4c0ca53122ab541d0ba67fc27df"
 	largeLogsAddr = "0x8dcd17433742f4c0ca53122ab541d0ba67fc27ff"
+
+	// The callees are predeployed, rather than reusing the deploy mod instances,
+	// because the tracetest mod needs to create a tx calling the calltree
+	// contract and does not have access to the deploy mod tx info.
+	calltreeAddr           = "0x9dcd17433742f4c0ca53122ab541d0ba67fc27d0"
+	calltreeCallmeAddr     = "0x9dcd17433742f4c0ca53122ab541d0ba67fc27d1"
+	calltreeCallenvAddr    = "0x9dcd17433742f4c0ca53122ab541d0ba67fc27d2"
+	calltreeCallrevertAddr = "0x9dcd17433742f4c0ca53122ab541d0ba67fc27d3"
 )
 
 // addModContracts adds the contracts used by block modifiers.
@@ -196,6 +225,22 @@ func addModContracts(ga types.GenesisAlloc) {
 	}
 	ga[common.HexToAddress(largeLogsAddr)] = types.Account{
 		Code:    modLargeReceiptCode,
+		Balance: new(big.Int),
+	}
+	ga[common.HexToAddress(calltreeAddr)] = types.Account{
+		Code:    calltreeCode,
+		Balance: big.NewInt(1000000000), // need balance to forward
+	}
+	ga[common.HexToAddress(calltreeCallmeAddr)] = types.Account{
+		Code:    callmeCode,
+		Balance: new(big.Int),
+	}
+	ga[common.HexToAddress(calltreeCallenvAddr)] = types.Account{
+		Code:    callenvCode,
+		Balance: new(big.Int),
+	}
+	ga[common.HexToAddress(calltreeCallrevertAddr)] = types.Account{
+		Code:    callrevertCode,
 		Balance: new(big.Int),
 	}
 }

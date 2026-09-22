@@ -38,6 +38,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	if _, ok := clientEnv["HIVE_TARGET_GAS_LIMIT"]; !ok {
+		// Match execution-apis' Geth default so all clients build the same next-block gas limit.
+		clientEnv["HIVE_TARGET_GAS_LIMIT"] = "60000000"
+	}
 
 	// Load the OpenRPC spec so speconly tests can be validated against the
 	// schema. The spec is shipped alongside the fixtures (see Dockerfile).
@@ -94,6 +98,7 @@ func runTest(t *hivesim.T, c *hivesim.Client, test *rpcTest) error {
 		err       error
 		respBytes []byte
 		method    string
+		request   string
 	)
 
 	for _, msg := range test.messages {
@@ -101,6 +106,7 @@ func runTest(t *hivesim.T, c *hivesim.Client, test *rpcTest) error {
 			// Send request.
 			t.Log(">> ", msg.data)
 			method = gjson.Get(msg.data, "method").String()
+			request = msg.data
 			respBytes, err = postHttp(client, url, strings.NewReader(msg.data))
 			if err != nil {
 				return err
@@ -124,7 +130,10 @@ func runTest(t *hivesim.T, c *hivesim.Client, test *rpcTest) error {
 			// the client includes.
 			hasError := gjson.Get(resp, "error").Exists()
 			if !hasError && test.speconly {
-				schema := specMethods[method]
+				schema, err := specMethods.forRequest(method, request)
+				if err != nil {
+					return err
+				}
 				if schema == nil {
 					return fmt.Errorf("no result schema for speconly method %s in spec", method)
 				}

@@ -1,5 +1,5 @@
 ARG tag=unstable
-ARG baseimage=silapandaops/nimbus-sil2
+ARG baseimage=ethpandaops/nimbus-eth2
 
 FROM $baseimage:$tag AS source
 
@@ -10,7 +10,7 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY --from=source /home/user/nimbus-sil2/build/nimbus_beacon_node /usr/bin/nimbus_beacon_node
+COPY --from=source /home/user/nimbus-eth2/build/nimbus_beacon_node /usr/bin/nimbus_beacon_node
 
 RUN usr/bin/nimbus_beacon_node --version > /version.txt
 

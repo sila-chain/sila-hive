@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bookworm AS lean-spec-base
 
-ARG github=leanSila/leanSpec
+ARG github=leanEthereum/leanSpec
 ARG RUST_NIGHTLY_TOOLCHAIN=nightly-2026-04-12
 
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* \
@@ -27,7 +27,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 FROM lean-spec-base AS builder-devnet4
 
-ARG github=leanSila/leanSpec
+ARG github=leanEthereum/leanSpec
 ARG devnet4_tag=db21cc24cbeeb78a91c42a713089fe0c845eb648
 ENV LEAN_SPEC_DEVNET4_COMMIT_METADATA_URL=https://api.github.com/repos/${github}/commits/${devnet4_tag}
 
@@ -43,7 +43,7 @@ RUN uv sync --frozen
 
 FROM lean-spec-base AS builder-devnet5
 
-ARG github=leanSila/leanSpec
+ARG github=leanEthereum/leanSpec
 ARG devnet5_tag=main
 ENV LEAN_SPEC_DEVNET5_COMMIT_METADATA_URL=https://api.github.com/repos/${github}/commits/${devnet5_tag}
 
@@ -65,7 +65,7 @@ ARG devnet5_keys_tag=latest
 ARG lean_spec_tests_github=ReamLabs/lean-spec-tests
 ARG lean_spec_tests_ref=a3bf5d72e74e3bdf7634e5ee3a8154aabf0a8565
 ARG RUST_NIGHTLY_TOOLCHAIN=nightly-2026-04-12
-ENV LEAN_SPEC_DEVNET5_KEYS_METADATA_URL=https://api.github.com/repos/leanSila/leansig-test-keys/releases/tags/${devnet5_keys_tag}
+ENV LEAN_SPEC_DEVNET5_KEYS_METADATA_URL=https://api.github.com/repos/leanEthereum/leansig-test-keys/releases/tags/${devnet5_keys_tag}
 ENV LEAN_SPEC_TESTS_METADATA_URL=https://api.github.com/repos/${lean_spec_tests_github}/commits/${lean_spec_tests_ref}
 
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* \
@@ -120,7 +120,7 @@ RUN mkdir -p /app/hive/prod_scheme_devnet4 /app/hive/prod_scheme_devnet5 /tmp/le
 
 RUN rm -rf /tmp/leansig/prod_scheme \
     && curl -fsSL \
-        https://github.com/leanSila/leansig-test-keys/releases/download/$devnet5_keys_tag/prod_scheme.tar.gz \
+        https://github.com/leanEthereum/leansig-test-keys/releases/download/$devnet5_keys_tag/prod_scheme.tar.gz \
         -o /tmp/leansig/prod_scheme_devnet5.tar.gz \
     && tar --warning=no-unknown-keyword -xzf /tmp/leansig/prod_scheme_devnet5.tar.gz -C /tmp/leansig \
         prod_scheme/0.json \

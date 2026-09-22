@@ -10,7 +10,7 @@ RUN apk add --virtual .build-deps alpine-sdk jq
 
 RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
 
-ARG github=silajs/ultralight
+ARG github=ethereumjs/ultralight
 ARG tag=master
 
 RUN echo "Cloning: $github - $tag" \

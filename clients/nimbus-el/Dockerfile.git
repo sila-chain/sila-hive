@@ -10,11 +10,11 @@ RUN apt-get clean && apt update \
 RUN ldd --version
 
 ARG tag=master
-ARG github=status-im/nimbus-sil1
+ARG github=status-im/nimbus-eth1
 
 RUN git clone --branch "$tag" https://github.com/$github
 
-WORKDIR /nimbus-sil1
+WORKDIR /nimbus-eth1
 
 RUN NPROC=$(nproc); make -j${NPROC} NIMFLAGS="--parallelBuild:${NPROC}" V=1 update
 

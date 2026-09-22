@@ -24,7 +24,7 @@ def to_int:
 # Replace 'config' section in input JSON.
 . + {
   "config": {
-    "silash": (if env.HIVE_CLIQUE_PERIOD then null else {} end),
+    "ethash": (if env.HIVE_CLIQUE_PERIOD then null else {} end),
     "clique": (if env.HIVE_CLIQUE_PERIOD == null then null else {
       "blockperiodseconds": env.HIVE_CLIQUE_PERIOD|to_int,
       "epochlength": 30000,
@@ -32,10 +32,10 @@ def to_int:
     "chainID": env.HIVE_CHAIN_ID|to_int,
     "homesteadBlock": env.HIVE_FORK_HOMESTEAD|to_int,
     "daoForkBlock": env.HIVE_FORK_DAO_BLOCK|to_int,
-    "sip150Block": env.HIVE_FORK_TANGERINE|to_int,
-    "sip150Hash": env.HIVE_FORK_TANGERINE_HASH,
-    "sip155Block": env.HIVE_FORK_SPURIOUS|to_int,
-    "sip158Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip150Block": env.HIVE_FORK_TANGERINE|to_int,
+    "eip150Hash": env.HIVE_FORK_TANGERINE_HASH,
+    "eip155Block": env.HIVE_FORK_SPURIOUS|to_int,
+    "eip158Block": env.HIVE_FORK_SPURIOUS|to_int,
     "byzantiumBlock": env.HIVE_FORK_BYZANTIUM|to_int,
     "constantinopleBlock": env.HIVE_FORK_CONSTANTINOPLE|to_int,
     "constantinopleFixBlock": env.HIVE_FORK_PETERSBURG|to_int,
@@ -52,6 +52,7 @@ def to_int:
     "pragueTime": env.HIVE_PRAGUE_TIMESTAMP|to_int,
     "osakaTime": env.HIVE_OSAKA_TIMESTAMP|to_int,
     "amsterdamTime": env.HIVE_AMSTERDAM_TIMESTAMP|to_int,
+    "bogotaTime": env.HIVE_BOGOTA_TIMESTAMP|to_int,
     "blobSchedule": {
       "cancun": {
         "target": (if env.HIVE_CANCUN_BLOB_TARGET then env.HIVE_CANCUN_BLOB_TARGET|to_int else 3 end),
@@ -68,31 +69,31 @@ def to_int:
         "max": (if env.HIVE_OSAKA_BLOB_MAX then env.HIVE_OSAKA_BLOB_MAX|to_int else 9 end),
         "baseFeeUpdateFraction": (if env.HIVE_OSAKA_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_OSAKA_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 5007716 end)
       },
-      "bpo1": {
+      "bpo1": (if env.HIVE_BPO1_TIMESTAMP then {
         "target": (if env.HIVE_BPO1_BLOB_TARGET then env.HIVE_BPO1_BLOB_TARGET|to_int else 10 end),
         "max": (if env.HIVE_BPO1_BLOB_MAX then env.HIVE_BPO1_BLOB_MAX|to_int else 15 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO1_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO1_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8346193 end)
-      },
-      "bpo2": {
+      } else null end),
+      "bpo2": (if env.HIVE_BPO2_TIMESTAMP then {
         "target": (if env.HIVE_BPO2_BLOB_TARGET then env.HIVE_BPO2_BLOB_TARGET|to_int else 14 end),
         "max": (if env.HIVE_BPO2_BLOB_MAX then env.HIVE_BPO2_BLOB_MAX|to_int else 21 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO2_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO2_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 11684671 end)
-      },
-      "bpo3": {
+      } else null end),
+      "bpo3": (if env.HIVE_BPO3_TIMESTAMP then {
         "target": (if env.HIVE_BPO3_BLOB_TARGET then env.HIVE_BPO3_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO3_BLOB_MAX then env.HIVE_BPO3_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO3_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO3_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      },
-      "bpo4": {
+      } else null end),
+      "bpo4": (if env.HIVE_BPO4_TIMESTAMP then {
         "target": (if env.HIVE_BPO4_BLOB_TARGET then env.HIVE_BPO4_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO4_BLOB_MAX then env.HIVE_BPO4_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO4_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO4_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      },
-      "bpo5": {
+      } else null end),
+      "bpo5": (if env.HIVE_BPO5_TIMESTAMP then {
         "target": (if env.HIVE_BPO5_BLOB_TARGET then env.HIVE_BPO5_BLOB_TARGET|to_int else 9 end),
         "max": (if env.HIVE_BPO5_BLOB_MAX then env.HIVE_BPO5_BLOB_MAX|to_int else 14 end),
         "baseFeeUpdateFraction": (if env.HIVE_BPO5_BLOB_BASE_FEE_UPDATE_FRACTION then env.HIVE_BPO5_BLOB_BASE_FEE_UPDATE_FRACTION|to_int else 8832827 end)
-      }
+      } else null end)
     },
     "bpo1Time": env.HIVE_BPO1_TIMESTAMP|to_int,
     "bpo2Time": env.HIVE_BPO2_TIMESTAMP|to_int,
@@ -102,7 +103,7 @@ def to_int:
     "depositContractAddress": (env.HIVE_DEPOSIT_CONTRACT_ADDRESS // "0x00000000219ab540356cBB839Cbe05303d7705Fa"),
     "withdrawalRequestContractAddress": "0x00000961ef480eb55e80d19ad83579a64c007002",
     "consolidationRequestContractAddress": "0x0000bbddc7ce488642fb579f8b00f3a590007251",
-    "builderDepositRequestContractAddress": "0x0000884d2aa32eaa155f59a2f24efa73d9008282",
-    "builderExitRequestContractAddress": "0x000014574a74c805590aff9499fc7a690f008282",
+    "builderDepositRequestContractAddress": "0x0000bff46984e3725691fa540a8c7589300d8282",
+    "builderExitRequestContractAddress": "0x000064d678505ad48f8ccb093bc65613800e8282",
   }|remove_empty
 }

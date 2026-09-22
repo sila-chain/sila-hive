@@ -17,7 +17,7 @@ case "$HIVE_LOGLEVEL" in
     5)   LOG=TRACE ;;
 esac
 
-builder_option=$([[ "$HIVE_SIL2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--payload-builder=true")
+builder_option=$([[ "$HIVE_ETH2_BUILDER_ENDPOINT" == "" ]] && echo "" || echo "--payload-builder=true")
 echo BUILDER=$builder_option
 
 echo Starting Nimbus Validator Client
@@ -26,7 +26,7 @@ echo Starting Nimbus Validator Client
     --non-interactive=true \
     --log-level="$LOG" \
     --data-dir=/data/vc \
-    --beacon-node="http://$HIVE_SIL2_BN_API_IP:$HIVE_SIL2_BN_API_PORT" \
+    --beacon-node="http://$HIVE_ETH2_BN_API_IP:$HIVE_ETH2_BN_API_PORT" \
     --validators-dir="/hive/input/keystores" \
     --secrets-dir="/hive/input/secrets" \
     $builder_option

@@ -4,7 +4,7 @@
 ## Builder stage: Compiles nimbus_portal_client from a git repository
 FROM debian:buster-slim AS builder
 
-ARG github=status-im/nimbus-sil1
+ARG github=status-im/nimbus-eth1
 ARG tag=master
 ENV NPROC=2
 ENV NIMFLAGS_COMMON="-d:disableMarchNative --gcc.options.debug:'-g1' --clang.options.debug:'-gline-tables-only'"
@@ -15,12 +15,12 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN echo "Cloning: $github - $tag" \
-    && git clone https://github.com/$github nimbus-sil1 \
-    && cd nimbus-sil1 \
+    && git clone https://github.com/$github nimbus-eth1 \
+    && cd nimbus-eth1 \
     && git checkout $tag \
     && make -j${NPROC} NIMFLAGS="${NIMFLAGS_COMMON} --parallelBuild:${NPROC}" V=1 update
 
-RUN cd nimbus-sil1 && \
+RUN cd nimbus-eth1 && \
     make -j${NPROC} NIMFLAGS="${NIMFLAGS_COMMON} --parallelBuild:${NPROC}" nimbus_portal_client && \
     mv build/nimbus_portal_client /usr/bin/
 

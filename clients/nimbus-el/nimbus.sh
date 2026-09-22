@@ -12,7 +12,7 @@
 # This script assumes the following environment variables:
 #
 #  - [x] HIVE_BOOTNODE                enode URL of the remote bootstrap node
-#  - [x] HIVE_NETWORK_ID              network ID number to use for the sil protocol
+#  - [x] HIVE_NETWORK_ID              network ID number to use for the eth protocol
 #  - [x] HIVE_CHAIN_ID                chain ID is used in transaction signature process
 #  - [ ] HIVE_NODETYPE                sync and pruning selector (archive, full, light)
 #
@@ -60,9 +60,9 @@ case "$HIVE_LOGLEVEL" in
 esac
 FLAGS="$FLAGS --log-level:$loglevel"
 
-# It doesn't make sense to dial out, use only a pre-set bootnode.
+# Hive provides a directly reachable peer, not a discovery network.
 if [ "$HIVE_BOOTNODE" != "" ]; then
-  FLAGS="$FLAGS --bootstrap-node:$HIVE_BOOTNODE"
+  FLAGS="$FLAGS --static-peers:$HIVE_BOOTNODE"
 fi
 
 if [ "$HIVE_NETWORK_ID" != "" ]; then
@@ -106,8 +106,8 @@ set -e
 
 # Configure RPC
 FLAGS="$FLAGS --http-address:0.0.0.0 --http-port:8545"
-FLAGS="$FLAGS --rpc --rpc-api:sil,debug,admin"
-FLAGS="$FLAGS --ws --ws-api:sil,debug,admin"
+FLAGS="$FLAGS --rpc --rpc-api:eth,debug,admin"
+FLAGS="$FLAGS --ws --ws-api:eth,debug,admin"
 
 # Configure graphql
 if [ "$HIVE_GRAPHQL_ENABLED" != "" ]; then
