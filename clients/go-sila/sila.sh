@@ -49,6 +49,12 @@ set -e
 sila=/usr/local/bin/sila
 FLAGS="--state.scheme=path"
 
+# Raise go-sila's engine API reorg depth limit (default 32) for simulators
+# that rewind deeply, e.g. consume-enginex.
+if [ "$HIVE_EXPECT_DEEP_REORGS" != "" ]; then
+    FLAGS="$FLAGS --engine.maxreorgdepth=512"
+fi
+
 if [ "$HIVE_LOGLEVEL" != "" ]; then
     FLAGS="$FLAGS --verbosity=$HIVE_LOGLEVEL"
 fi
@@ -123,7 +129,7 @@ if [ "$HIVE_CLIQUE_PRIVATEKEY" != "" ]; then
     echo "secret" > /sila-password-file.txt
     $sila account import --password /sila-password-file.txt <(echo "$HIVE_CLIQUE_PRIVATEKEY")
 
-    # Ensure password file is used when running sila in mining mode.
+    # Ensure password file is used when running geth in mining mode.
     if [ "$HIVE_MINER" != "" ]; then
         FLAGS="$FLAGS --password /sila-password-file.txt --unlock $HIVE_MINER --allow-insecure-unlock"
     fi
@@ -131,7 +137,7 @@ fi
 
 # Configure any mining operation
 if [ "$HIVE_MINER" != "" ] && [ "$HIVE_NODETYPE" != "light" ]; then
-    FLAGS="$FLAGS --mine --miner.etherbase $HIVE_MINER"
+    FLAGS="$FLAGS --miner.pending.feeRecipient $HIVE_MINER"
 fi
 if [ "$HIVE_MINER_EXTRA" != "" ]; then
     FLAGS="$FLAGS --miner.extradata $HIVE_MINER_EXTRA"
