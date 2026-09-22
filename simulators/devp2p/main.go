@@ -88,9 +88,9 @@ func main() {
 	}
 
 	forkenv := loadTestChainConfig()
-	sil := hivesim.Suite{
-		Name:        "sil",
-		Description: "This suite tests a client's ability to accurately respond to basic sil protocol messages.",
+	eth := hivesim.Suite{
+		Name:        "eth",
+		Description: "This suite tests a client's ability to accurately respond to basic eth protocol messages.",
 		Tests: []hivesim.AnyTest{
 			hivesim.ClientTestSpec{
 				Role: "sil1",
@@ -128,7 +128,27 @@ Results from the test tool are reported as individual sub-tests.`,
 		},
 	}
 
-	hivesim.MustRun(hivesim.New(), discv4, discv5, sil, snap)
+	snap2 := hivesim.Suite{
+		Name:        "snap2",
+		Description: "This suite tests the snap/2 protocol (SIP-8189): BAL-based state healing.",
+		Tests: []hivesim.AnyTest{
+			hivesim.ClientTestSpec{
+				Role: "sil1",
+				Name: "client launch",
+				Description: `This test launches the client and runs the snap/2 test tool.
+Results from the test tool are reported as individual sub-tests.`,
+				Parameters: forkenv,
+				Files: map[string]string{
+					"genesis.json": testChainDir + "/genesis.json",
+					"chain.rlp":    testChainDir + "/chain.rlp",
+				},
+				AlwaysRun: true,
+				Run:       runSnap2Test,
+			},
+		},
+	}
+
+	hivesim.MustRun(hivesim.New(), discv4, discv5, eth, snap, snap2)
 }
 
 func loadTestChainConfig() hivesim.Params {
@@ -150,7 +170,7 @@ func runEthTest(t *hivesim.T, c *hivesim.Client) {
 	}
 
 	_, pattern := t.Sim.TestPattern()
-	cmd := exec.Command("./devp2p", "rlpx", "sil-test",
+	cmd := exec.Command("./devp2p", "rlpx", "eth-test",
 		"--tap",
 		"--run", pattern,
 		"--node", enode,
@@ -171,6 +191,26 @@ func runSnapTest(t *hivesim.T, c *hivesim.Client) {
 
 	_, pattern := t.Sim.TestPattern()
 	cmd := exec.Command("./devp2p", "rlpx", "snap-test",
+		"--tap",
+		"--run", pattern,
+		"--node", enode,
+		"--chain", testChainDir,
+		"--engineapi", fmt.Sprintf("http://%s:8551", c.IP),
+		"--jwtsecret", "0x7365637265747365637265747365637265747365637265747365637265747365",
+	)
+	if err := runTAP(t, c.Type, cmd); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func runSnap2Test(t *hivesim.T, c *hivesim.Client) {
+	enode, err := c.EnodeURL()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, pattern := t.Sim.TestPattern()
+	cmd := exec.Command("./devp2p", "rlpx", "snap2-test",
 		"--tap",
 		"--run", pattern,
 		"--node", enode,
@@ -305,7 +345,7 @@ func reportTAP(t *hivesim.T, clientName string, output io.Reader) error {
 }
 
 func getBeaconENR(c *hivesim.Client) (string, error) {
-	url := fmt.Sprintf("http://%v:4000/sil/v1/node/identity", c.IP)
+	url := fmt.Sprintf("http://%v:4000/eth/v1/node/identity", c.IP)
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err

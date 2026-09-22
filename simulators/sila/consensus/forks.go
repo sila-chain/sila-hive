@@ -114,7 +114,7 @@ var envForks = map[string]map[string]int{
 		"HIVE_FORK_BERLIN":         2000,
 		"HIVE_FORK_LONDON":         2000,
 	},
-	"HomesteadToSIP150At5": {
+	"HomesteadToEIP150At5": {
 		"HIVE_FORK_HOMESTEAD":      0,
 		"HIVE_FORK_TANGERINE":      5,
 		"HIVE_FORK_SPURIOUS":       2000,
@@ -238,7 +238,7 @@ var envForks = map[string]map[string]int{
 		"HIVE_FORK_LONDON":               0,
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 786432,
 	},
-	"Merge": { // Remove once SilaParis replaces Merge
+	"Merge": { // Remove once Paris replaces Merge
 		"HIVE_FORK_HOMESTEAD":            0,
 		"HIVE_FORK_TANGERINE":            0,
 		"HIVE_FORK_SPURIOUS":             0,
@@ -251,7 +251,7 @@ var envForks = map[string]map[string]int{
 		"HIVE_FORK_MERGE":                0,
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 0,
 	},
-	"SilaParis": {
+	"Paris": {
 		"HIVE_FORK_HOMESTEAD":            0,
 		"HIVE_FORK_TANGERINE":            0,
 		"HIVE_FORK_SPURIOUS":             0,
@@ -264,7 +264,7 @@ var envForks = map[string]map[string]int{
 		"HIVE_FORK_MERGE":                0,
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 0,
 	},
-	"SilaShanghai": {
+	"Shanghai": {
 		"HIVE_FORK_HOMESTEAD":            0,
 		"HIVE_FORK_TANGERINE":            0,
 		"HIVE_FORK_SPURIOUS":             0,
@@ -306,7 +306,7 @@ var envForks = map[string]map[string]int{
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 0,
 		"HIVE_SHANGHAI_TIMESTAMP":        15000,
 	},
-	"SilaCancun": {
+	"Cancun": {
 		"HIVE_FORK_HOMESTEAD":            0,
 		"HIVE_FORK_TANGERINE":            0,
 		"HIVE_FORK_SPURIOUS":             0,
@@ -320,6 +320,22 @@ var envForks = map[string]map[string]int{
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 0,
 		"HIVE_SHANGHAI_TIMESTAMP":        0,
 		"HIVE_CANCUN_TIMESTAMP":          0,
+	},
+	"Prague": {
+		"HIVE_FORK_HOMESTEAD":            0,
+		"HIVE_FORK_TANGERINE":            0,
+		"HIVE_FORK_SPURIOUS":             0,
+		"HIVE_FORK_BYZANTIUM":            0,
+		"HIVE_FORK_CONSTANTINOPLE":       0,
+		"HIVE_FORK_PETERSBURG":           0,
+		"HIVE_FORK_ISTANBUL":             0,
+		"HIVE_FORK_BERLIN":               0,
+		"HIVE_FORK_LONDON":               0,
+		"HIVE_FORK_MERGE":                0,
+		"HIVE_TERMINAL_TOTAL_DIFFICULTY": 0,
+		"HIVE_SHANGHAI_TIMESTAMP":        0,
+		"HIVE_CANCUN_TIMESTAMP":          0,
+		"HIVE_PRAGUE_TIMESTAMP":          0,
 	},
 	"ShanghaiToCancunAtTime15k": {
 		"HIVE_FORK_HOMESTEAD":            0,
