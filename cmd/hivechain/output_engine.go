@@ -74,17 +74,17 @@ func (g *generator) block2newpayload(b *types.Block) *rpcRequest {
 			panic(fmt.Sprintf("missing execution requests for block %d", b.NumberU64()))
 		}
 		params = append(params, blobHashes, b.BeaconRoot(), encodeEngineRequests(requests))
-	case cfg.IsPrague(b.Number(), b.Time()):
+	case cfg.IsSilaPrague(b.Number(), b.Time()):
 		method = "engine_newPayloadV4"
 		requests, ok := g.clRequests[b.NumberU64()]
 		if !ok {
 			panic(fmt.Sprintf("missing execution requests for block %d", b.NumberU64()))
 		}
 		params = append(params, blobHashes, b.BeaconRoot(), encodeEngineRequests(requests))
-	case cfg.IsCancun(b.Number(), b.Time()):
+	case cfg.IsSilaCancun(b.Number(), b.Time()):
 		method = "engine_newPayloadV3"
 		params = append(params, blobHashes, b.BeaconRoot())
-	case cfg.IsShanghai(b.Number(), b.Time()):
+	case cfg.IsSilaShanghai(b.Number(), b.Time()):
 		method = "engine_newPayloadV2"
 	default:
 		method = "engine_newPayloadV1"
@@ -121,10 +121,10 @@ func (g *generator) block2fcu(b *types.Block) *rpcRequest {
 	case cfg.IsAmsterdam(b.Number(), b.Time()):
 		method = "engine_forkchoiceUpdatedV4"
 		params = []any{&fc, nil, nil}
-	case cfg.IsCancun(b.Number(), b.Time()):
+	case cfg.IsSilaCancun(b.Number(), b.Time()):
 		method = "engine_forkchoiceUpdatedV3"
 		params = []any{&fc, nil}
-	case cfg.IsShanghai(b.Number(), b.Time()):
+	case cfg.IsSilaShanghai(b.Number(), b.Time()):
 		method = "engine_forkchoiceUpdatedV2"
 		params = []any{&fc, nil}
 	default:
