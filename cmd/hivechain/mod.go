@@ -89,7 +89,7 @@ func (ctx *genBlockContext) TxCreateIntrinsicGas(data []byte) uint64 {
 // TxGasFeeCap returns the minimum gasprice that should be used for transactions.
 func (ctx *genBlockContext) TxGasFeeCap() *big.Int {
 	fee := big.NewInt(1)
-	if !ctx.ChainConfig().IsLondon(ctx.block.Number()) {
+	if !ctx.ChainConfig().IsSilaLondon(ctx.block.Number()) {
 		return fee
 	}
 	return fee.Add(fee, ctx.block.BaseFee())
