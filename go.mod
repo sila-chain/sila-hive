@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1
-	github.com/sila-chain/go-sila v1.16.4
+	github.com/sila-chain/go-sila v1.17.4-0.20260920222330-2c2deea9ac4a
 	github.com/sila-chain/sila-hive/hiveproxy v0.0.0-20240610172618-786a798a0cfe
 	github.com/evanw/esbuild v0.18.11
 	github.com/fatih/color v1.18.0
