@@ -34,4 +34,9 @@ jobs:
             cat /tmp/calltree.bin
           } | sha1sum | awk '{print "GIT_BLOB_SHA=" $1}'
           sha256sum /tmp/calltree.bin
+          cmp /tmp/calltree.bin bytecode/calltree.bin
+          go build ./...
+          go test ./...
           echo "CALLTREE_BASE64=$(base64 -w0 /tmp/calltree.bin)"
+          echo "GO_MOD_BASE64=$(base64 -w0 ../../go.mod)"
+          echo "GO_SUM_BASE64=$(base64 -w0 ../../go.sum)"
