@@ -43,7 +43,7 @@ type traceTxInfo struct {
 }
 
 func (m *modTraceTx) apply(ctx *genBlockContext) bool {
-	if !ctx.ChainConfig().IsLondon(ctx.Number()) {
+	if !ctx.ChainConfig().IsSilaLondon(ctx.Number()) {
 		return false
 	}
 	if !ctx.HasGas(m.gasLimit) {
