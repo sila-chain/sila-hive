@@ -12,14 +12,14 @@
 #
 #  - HIVE_BOOTNODE             enode URL of the remote bootstrap node
 #  - HIVE_NETWORK_ID           network ID number to use for the eth protocol
-#  - HIVE_FORK_HOMESTEAD       block number of the homestead transition
+#  - HIVE_FORK_SILA_HOMESTEAD       block number of the homestead transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transition
 #  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
 #  - HIVE_FORK_SPURIOUS        block number of SpuriousDragon
-#  - HIVE_FORK_BYZANTIUM       block number for Byzantium transition
-#  - HIVE_FORK_CONSTANTINOPLE  block number for Constantinople transition
+#  - HIVE_FORK_SILA_BYZANTIUM       block number for Byzantium transition
+#  - HIVE_FORK_SILA_CONSTANTINOPLE  block number for Constantinople transition
 #  - HIVE_FORK_PETERSBURG      block number for ConstantinopleFix/Petersburg transition
-#  - HIVE_FORK_ISTANBUL        block number for Istanbul transition
+#  - HIVE_FORK_SILA_ISTANBUL        block number for Istanbul transition
 #  - HIVE_FORK_MUIR_GLACIER    block number for MuirGlacier transition
 #  - HIVE_MINER                address to credit with mining rewards
 #  - HIVE_MINER_EXTRA          extra-data field to set for newly minted blocks

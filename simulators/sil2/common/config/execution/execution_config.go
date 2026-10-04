@@ -366,26 +366,26 @@ func (conf *ExecutionGenesis) ToParams(
 		"HIVE_DEPOSIT_CONTRACT_ADDRESS": common.Address(depositAddress).String(),
 		"HIVE_NETWORK_ID":               fmt.Sprintf("%d", conf.NetworkID()),
 		"HIVE_CHAIN_ID":                 conf.Genesis.Config.ChainID.String(),
-		"HIVE_FORK_HOMESTEAD":           conf.Genesis.Config.HomesteadBlock.String(),
+		"HIVE_FORK_SILA_HOMESTEAD":      conf.Genesis.Config.HomesteadBlock.String(),
 		//"HIVE_FORK_DAO_BLOCK":           conf.Genesis.Config.DAOForkBlock.String(),  // nil error, not used anyway
 		"HIVE_FORK_TANGERINE":            conf.Genesis.Config.SIP150Block.String(),
 		"HIVE_FORK_SPURIOUS":             conf.Genesis.Config.SIP155Block.String(), // also sip558
-		"HIVE_FORK_BYZANTIUM":            conf.Genesis.Config.ByzantiumBlock.String(),
-		"HIVE_FORK_CONSTANTINOPLE":       conf.Genesis.Config.ConstantinopleBlock.String(),
+		"HIVE_FORK_SILA_BYZANTIUM":       conf.Genesis.Config.ByzantiumBlock.String(),
+		"HIVE_FORK_SILA_CONSTANTINOPLE":  conf.Genesis.Config.ConstantinopleBlock.String(),
 		"HIVE_FORK_PETERSBURG":           conf.Genesis.Config.PetersburgBlock.String(),
-		"HIVE_FORK_ISTANBUL":             conf.Genesis.Config.IstanbulBlock.String(),
+		"HIVE_FORK_SILA_ISTANBUL":        conf.Genesis.Config.IstanbulBlock.String(),
 		"HIVE_FORK_MUIRGLACIER":          conf.Genesis.Config.MuirGlacierBlock.String(),
-		"HIVE_FORK_BERLIN":               conf.Genesis.Config.BerlinBlock.String(),
-		"HIVE_FORK_LONDON":               conf.Genesis.Config.LondonBlock.String(),
+		"HIVE_FORK_SILA_BERLIN":          conf.Genesis.Config.BerlinBlock.String(),
+		"HIVE_FORK_SILA_LONDON":          conf.Genesis.Config.LondonBlock.String(),
 		"HIVE_FORK_ARROWGLACIER":         conf.Genesis.Config.ArrowGlacierBlock.String(),
 		"HIVE_MERGE_BLOCK_ID":            conf.Genesis.Config.MergeNetsplitBlock.String(),
 		"HIVE_TERMINAL_TOTAL_DIFFICULTY": conf.Genesis.Config.TerminalTotalDifficulty.String(),
 	}
 	if conf.Genesis.Config.ShanghaiTime != nil {
-		params["HIVE_SHANGHAI_TIMESTAMP"] = fmt.Sprint(*conf.Genesis.Config.ShanghaiTime)
+		params["HIVE_SILA_SHANGHAI_TIMESTAMP"] = fmt.Sprint(*conf.Genesis.Config.ShanghaiTime)
 	}
 	if conf.Genesis.Config.CancunTime != nil {
-		params["HIVE_CANCUN_TIMESTAMP"] = fmt.Sprint(*conf.Genesis.Config.CancunTime)
+		params["HIVE_SILA_CANCUN_TIMESTAMP"] = fmt.Sprint(*conf.Genesis.Config.CancunTime)
 	}
 	if conf.Genesis.Config.Clique != nil {
 		params["HIVE_CLIQUE_PERIOD"] = fmt.Sprint(conf.Genesis.Config.Clique.Period)

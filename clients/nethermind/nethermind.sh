@@ -18,15 +18,15 @@
 #
 # Forks:
 #
-#  - HIVE_FORK_HOMESTEAD       block number of the DAO hard-fork transition
+#  - HIVE_FORK_SILA_HOMESTEAD       block number of the DAO hard-fork transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transitionnsition
 #  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
 #  - HIVE_FORK_SPURIOUS        block number of SpuriousDragon
-#  - HIVE_FORK_BYZANTIUM       block number for Byzantium transition
-#  - HIVE_FORK_CONSTANTINOPLE  block number for Constantinople transition
+#  - HIVE_FORK_SILA_BYZANTIUM       block number for Byzantium transition
+#  - HIVE_FORK_SILA_CONSTANTINOPLE  block number for Constantinople transition
 #  - HIVE_FORK_PETERSBURG      block number for ConstantinopleFix/PetersBurg transition
-#  - HIVE_FORK_BERLIN          block number for Berlin transition
-#  - HIVE_FORK_LONDON          block number for London
+#  - HIVE_FORK_SILA_BERLIN          block number for Berlin transition
+#  - HIVE_FORK_SILA_LONDON          block number for London
 #
 # Clique PoA:
 #

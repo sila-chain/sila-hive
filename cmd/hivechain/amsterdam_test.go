@@ -150,7 +150,7 @@ func TestAmsterdamConfigAndForkEnv(t *testing.T) {
 	if err := json.Unmarshal(data, &env); err != nil {
 		t.Fatal(err)
 	}
-	if got, want := env["HIVE_AMSTERDAM_TIMESTAMP"], "120"; got != want {
+	if got, want := env["HIVE_SILA_AMSTERDAM_TIMESTAMP"], "120"; got != want {
 		t.Fatalf("wrong Amsterdam forkenv timestamp: got %q, want %q", got, want)
 	}
 }
