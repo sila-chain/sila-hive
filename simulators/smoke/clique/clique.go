@@ -25,8 +25,8 @@ func main() {
 			// These are required for clique.
 			"HIVE_CHAIN_ID":                 "1334",
 			"HIVE_FORK_SILA_HOMESTEAD":      "0",
-			"HIVE_FORK_TANGERINE":           "0",
-			"HIVE_FORK_SPURIOUS":            "0",
+			"HIVE_FORK_SIP150":           "0",
+			"HIVE_FORK_SIP158":            "0",
 			"HIVE_FORK_SILA_BYZANTIUM":      "0",
 			"HIVE_FORK_SILA_CONSTANTINOPLE": "0",
 			"HIVE_FORK_PETERSBURG":          "0",

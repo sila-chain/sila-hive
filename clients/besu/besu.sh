@@ -16,8 +16,8 @@
 #
 #  - HIVE_FORK_SILA_HOMESTEAD       block number of the DAO hard-fork transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transitionnsition
-#  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
-#  - HIVE_FORK_SPURIOUS        block number of SpuriousDragon
+#  - HIVE_FORK_SIP150       block number of SIP150
+#  - HIVE_FORK_SIP158        block number of SIP158
 #  - HIVE_FORK_SILA_BYZANTIUM       block number for Byzantium transition
 #  - HIVE_FORK_SILA_CONSTANTINOPLE  block number for Constantinople transition
 #  - HIVE_FORK_PETERSBURG      block number for ConstantinopleFix/Petersburg transition

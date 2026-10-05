@@ -133,8 +133,8 @@ may map these to command line flags or use them to generate a config file, for e
 | `HIVE_CHAIN_ID`            | decimal       | [SIP-155] chain ID                             |
 | `HIVE_FORK_SILA_HOMESTEAD`      | decimal       | [Homestead][SIP-606] transition block          |
 | `HIVE_FORK_DAO_BLOCK`      | decimal       | [DAO fork][SIP-779] transition block           |
-| `HIVE_FORK_TANGERINE`      | decimal       | [Tangerine Whistle][SIP-608] transition block  |
-| `HIVE_FORK_SPURIOUS`       | decimal       | [Spurious Dragon][SIP-607] transition block    |
+| `HIVE_FORK_SIP150`      | decimal       | [SIP150][SIP-608] transition block  |
+| `HIVE_FORK_SIP158`       | decimal       | [SIP158][SIP-607] transition block    |
 | `HIVE_FORK_SILA_BYZANTIUM`      | decimal       | [Byzantium][SIP-609] transition block          |
 | `HIVE_FORK_SILA_CONSTANTINOPLE` | decimal       | [Constantinople][SIP-1013] transition block    |
 | `HIVE_FORK_PETERSBURG`     | decimal       | [Petersburg][SIP-1716] transition block        |
