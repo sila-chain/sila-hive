@@ -1,12 +1,12 @@
-# Builds and runs the EELS (execution-specs) execute-blobs simulator
+# Builds and runs the SELS (execution-specs) execute-blobs simulator
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 ## Default git-ref/fork
 ARG branch=""
-ARG fork=Osaka
+ARG fork=SilaOsaka
 ENV FORK=${fork}
 
-## Clone and install EELS
+## Clone and install SELS
 RUN apt-get update && apt-get install -y git
 
 # Clone repo and use the default branch if none specified

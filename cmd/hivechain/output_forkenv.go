@@ -35,27 +35,27 @@ func (g *generator) writeForkEnv() error {
 			env[hive] = fmt.Sprintf("%d", *timestamp)
 		}
 	}
-	setNum("HIVE_FORK_HOMESTEAD", cfg.SilaHomesteadBlock)
-	setNum("HIVE_FORK_TANGERINE", cfg.SIP150Block)
-	setNum("HIVE_FORK_SPURIOUS", cfg.SIP155Block)
-	setNum("HIVE_FORK_BYZANTIUM", cfg.SilaByzantiumBlock)
-	setNum("HIVE_FORK_CONSTANTINOPLE", cfg.SilaConstantinopleBlock)
+	setNum("HIVE_FORK_SILA_HOMESTEAD", cfg.SilaHomesteadBlock)
+	setNum("HIVE_FORK_SIP150", cfg.SIP150Block)
+	setNum("HIVE_FORK_SIP158", cfg.SIP158Block)
+	setNum("HIVE_FORK_SILA_BYZANTIUM", cfg.SilaByzantiumBlock)
+	setNum("HIVE_FORK_SILA_CONSTANTINOPLE", cfg.SilaConstantinopleBlock)
 	setNum("HIVE_FORK_PETERSBURG", cfg.PetersburgBlock)
-	setNum("HIVE_FORK_ISTANBUL", cfg.SilaIstanbulBlock)
+	setNum("HIVE_FORK_SILA_ISTANBUL", cfg.SilaIstanbulBlock)
 	setNum("HIVE_FORK_MUIR_GLACIER", cfg.MuirGlacierBlock)
 	setNum("HIVE_FORK_ARROW_GLACIER", cfg.ArrowGlacierBlock)
 	setNum("HIVE_FORK_GRAY_GLACIER", cfg.GrayGlacierBlock)
-	setNum("HIVE_FORK_BERLIN", cfg.SilaBerlinBlock)
-	setNum("HIVE_FORK_LONDON", cfg.SilaLondonBlock)
+	setNum("HIVE_FORK_SILA_BERLIN", cfg.SilaBerlinBlock)
+	setNum("HIVE_FORK_SILA_LONDON", cfg.SilaLondonBlock)
 	setNum("HIVE_MERGE_BLOCK_ID", cfg.MergeNetsplitBlock)
 	setNum("HIVE_TERMINAL_TOTAL_DIFFICULTY", cfg.TerminalTotalDifficulty)
-	setTime("HIVE_SHANGHAI_TIMESTAMP", cfg.SilaShanghaiTime)
-	setTime("HIVE_CANCUN_TIMESTAMP", cfg.SilaCancunTime)
-	setTime("HIVE_PRAGUE_TIMESTAMP", cfg.SilaPragueTime)
-	setTime("HIVE_OSAKA_TIMESTAMP", cfg.SilaOsakaTime)
+	setTime("HIVE_SILA_SHANGHAI_TIMESTAMP", cfg.SilaShanghaiTime)
+	setTime("HIVE_SILA_CANCUN_TIMESTAMP", cfg.SilaCancunTime)
+	setTime("HIVE_SILA_PRAGUE_TIMESTAMP", cfg.SilaPragueTime)
+	setTime("HIVE_SILA_OSAKA_TIMESTAMP", cfg.SilaOsakaTime)
 	setTime("HIVE_BPO1_TIMESTAMP", cfg.BPO1Time)
 	setTime("HIVE_BPO2_TIMESTAMP", cfg.BPO2Time)
-	setTime("HIVE_AMSTERDAM_TIMESTAMP", cfg.AmsterdamTime)
+	setTime("HIVE_SILA_AMSTERDAM_TIMESTAMP", cfg.AmsterdamTime)
 
 	// blob schedule
 	setBlobConfig := func(fork string, bc *params.BlobConfig) {
@@ -66,11 +66,11 @@ func (g *generator) writeForkEnv() error {
 		}
 	}
 	if cfg.BlobScheduleConfig != nil {
-		setBlobConfig("CANCUN", cfg.BlobScheduleConfig.SilaCancun)
-		setBlobConfig("PRAGUE", cfg.BlobScheduleConfig.SilaPrague)
+		setBlobConfig("SILA_CANCUN", cfg.BlobScheduleConfig.SilaCancun)
+		setBlobConfig("SILA_PRAGUE", cfg.BlobScheduleConfig.SilaPrague)
 		// Named forks inherit the most recent BPO configuration. Keep exporting
 		// the Osaka aliases for client mappers which still model it explicitly.
-		setBlobConfig("OSAKA", cfg.BlobScheduleConfig.SilaPrague)
+		setBlobConfig("SILA_OSAKA", cfg.BlobScheduleConfig.SilaPrague)
 		setBlobConfig("BPO1", cfg.BlobScheduleConfig.BPO1)
 		setBlobConfig("BPO2", cfg.BlobScheduleConfig.BPO2)
 	}

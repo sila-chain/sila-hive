@@ -1,12 +1,12 @@
-# Builds and runs the EELS (execution-specs) consume enginex simulator
+# Builds and runs the SELS (execution-specs) consume enginex simulator
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 ## Default fixtures/git-ref
-ARG fixtures=stable@latest
+ARG fixtures=tests@latest
 ENV FIXTURES=${fixtures}
 ARG branch=""
 
-## Clone and install EELS
+## Clone and install SELS
 RUN apt-get update && apt-get install -y git isal
 
 # Clone repo and use the default branch if none specified

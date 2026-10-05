@@ -146,9 +146,9 @@ func makeRunner(tests []test.Spec, nodeType string) func(t *hivesim.T) {
 			newParams = newParams.Set("HIVE_TERMINAL_TOTAL_DIFFICULTY", fmt.Sprintf("%d", genesis.Difficulty))
 			newParams = newParams.Set("HIVE_MERGE_BLOCK_ID", "0")
 			if forkConfig.ShanghaiTimestamp != nil {
-				newParams = newParams.Set("HIVE_SHANGHAI_TIMESTAMP", fmt.Sprintf("%d", forkConfig.ShanghaiTimestamp))
+				newParams = newParams.Set("HIVE_SILA_SHANGHAI_TIMESTAMP", fmt.Sprintf("%d", forkConfig.ShanghaiTimestamp))
 				if forkConfig.CancunTimestamp != nil {
-					newParams = newParams.Set("HIVE_CANCUN_TIMESTAMP", fmt.Sprintf("%d", forkConfig.CancunTimestamp))
+					newParams = newParams.Set("HIVE_SILA_CANCUN_TIMESTAMP", fmt.Sprintf("%d", forkConfig.CancunTimestamp))
 				}
 			}
 

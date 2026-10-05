@@ -54,7 +54,7 @@ fi
 
 # Load the remainder of the test chain
 # Iterate per file rather than passing the directory: some test fixtures
-# (e.g. EEST consume-rlp fork-transition tests) deliberately include
+# (e.g. SEST consume-rlp fork-transition tests) deliberately include
 # rejected blocks alongside valid ones, and ethrex's `import` aborts the
 # whole chain on the first failure. Looping here keeps `import` strict
 # while still applying later valid blocks. Mirrors erigon/ethereumjs/nimbus.

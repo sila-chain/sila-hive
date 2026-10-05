@@ -12,14 +12,14 @@
 #
 #  - HIVE_BOOTNODE             enode URL of the remote bootstrap node
 #  - HIVE_NETWORK_ID           network ID number to use for the eth protocol
-#  - HIVE_FORK_HOMESTEAD       block number of the homestead transition
+#  - HIVE_FORK_SILA_HOMESTEAD       block number of the homestead transition
 #  - HIVE_FORK_DAO_BLOCK       block number of the DAO hard-fork transition
-#  - HIVE_FORK_TANGERINE       block number of TangerineWhistle
-#  - HIVE_FORK_SPURIOUS        block number of SpuriousDragon
-#  - HIVE_FORK_BYZANTIUM       block number for Byzantium transition
-#  - HIVE_FORK_CONSTANTINOPLE  block number for Constantinople transition
+#  - HIVE_FORK_SIP150       block number of SIP150
+#  - HIVE_FORK_SIP158        block number of SIP158
+#  - HIVE_FORK_SILA_BYZANTIUM       block number for Byzantium transition
+#  - HIVE_FORK_SILA_CONSTANTINOPLE  block number for Constantinople transition
 #  - HIVE_FORK_PETERSBURG      block number for ConstantinopleFix/Petersburg transition
-#  - HIVE_FORK_ISTANBUL        block number for Istanbul transition
+#  - HIVE_FORK_SILA_ISTANBUL        block number for Istanbul transition
 #  - HIVE_FORK_MUIR_GLACIER    block number for MuirGlacier transition
 #  - HIVE_MINER                address to credit with mining rewards
 #  - HIVE_MINER_EXTRA          extra-data field to set for newly minted blocks
@@ -37,7 +37,7 @@ erigon=/usr/local/bin/erigon
 
 # consume-enginex reuses one client across tests in same groupings and requires longer reorgs than the default of 96 blocks for some tests
 # TODO can be removed once work is done to support unlimited reorgs based on finalised hash (tracked by https://github.com/erigontech/erigon/issues/17070)
-# will need EELS to also send FCUs with finalised=genesis_hash,justified=genesis_hash too
+# will need SELS to also send FCUs with finalised=genesis_hash,justified=genesis_hash too
 export MAX_REORG_DEPTH=512
 
 if [ "$HIVE_LOGLEVEL" != "" ]; then

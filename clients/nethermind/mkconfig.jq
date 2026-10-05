@@ -68,7 +68,7 @@ def sync_config:
 ;
 
 def txpool_config:
-  if env.HIVE_CANCUN_TIMESTAMP != null then
+  if env.HIVE_SILA_CANCUN_TIMESTAMP != null then
     {
       "TxPool": {
         "BlobsSupport": "StorageWithReorgs"

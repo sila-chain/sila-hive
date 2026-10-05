@@ -76,18 +76,18 @@ var (
 	MinerAddrHex = "658bdf435d810c91414ec09147daa6db62406379"
 
 	DefaultClientEnv = hivesim.Params{
-		"HIVE_NETWORK_ID":          NetworkID.String(),
-		"HIVE_CHAIN_ID":            ChainID.String(),
-		"HIVE_FORK_HOMESTEAD":      "0",
-		"HIVE_FORK_TANGERINE":      "0",
-		"HIVE_FORK_SPURIOUS":       "0",
-		"HIVE_FORK_BYZANTIUM":      "0",
-		"HIVE_FORK_CONSTANTINOPLE": "0",
-		"HIVE_FORK_PETERSBURG":     "0",
-		"HIVE_FORK_ISTANBUL":       "0",
-		"HIVE_FORK_MUIR_GLACIER":   "0",
-		"HIVE_FORK_BERLIN":         "0",
-		"HIVE_FORK_LONDON":         "0",
+		"HIVE_NETWORK_ID":               NetworkID.String(),
+		"HIVE_CHAIN_ID":                 ChainID.String(),
+		"HIVE_FORK_SILA_HOMESTEAD":      "0",
+		"HIVE_FORK_SIP150":           "0",
+		"HIVE_FORK_SIP158":            "0",
+		"HIVE_FORK_SILA_BYZANTIUM":      "0",
+		"HIVE_FORK_SILA_CONSTANTINOPLE": "0",
+		"HIVE_FORK_PETERSBURG":          "0",
+		"HIVE_FORK_SILA_ISTANBUL":       "0",
+		"HIVE_FORK_MUIR_GLACIER":        "0",
+		"HIVE_FORK_SILA_BERLIN":         "0",
+		"HIVE_FORK_SILA_LONDON":         "0",
 		// Merge related
 		"HIVE_MERGE_BLOCK_ID": "100",
 	}

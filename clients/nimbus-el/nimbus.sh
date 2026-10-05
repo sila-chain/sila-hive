@@ -18,18 +18,18 @@
 #
 # Forks:
 #
-#  - [x] HIVE_FORK_HOMESTEAD          block number of the homestead hard-fork transition
+#  - [x] HIVE_FORK_SILA_HOMESTEAD          block number of the homestead hard-fork transition
 #  - [x] HIVE_FORK_DAO_BLOCK          block number of the DAO hard-fork transition
 #  - [x] HIVE_FORK_DAO_VOTE           whether the node support (or opposes) the DAO fork
-#  - [x] HIVE_FORK_TANGERINE          block number of Tangerine Whistle transition
-#  - [x] HIVE_FORK_SPURIOUS           block number of Spurious Dragon transition
-#  - [x] HIVE_FORK_BYZANTIUM          block number for Byzantium transition
-#  - [x] HIVE_FORK_CONSTANTINOPLE     block number for Constantinople transition
+#  - [x] HIVE_FORK_SIP150          block number of SIP150 transition
+#  - [x] HIVE_FORK_SIP158           block number of SIP158 transition
+#  - [x] HIVE_FORK_SILA_BYZANTIUM          block number for Byzantium transition
+#  - [x] HIVE_FORK_SILA_CONSTANTINOPLE     block number for Constantinople transition
 #  - [x] HIVE_FORK_PETERSBURG         block number for ConstantinopleFix/PetersBurg transition
-#  - [x] HIVE_FORK_ISTANBUL           block number for Istanbul transition
+#  - [x] HIVE_FORK_SILA_ISTANBUL           block number for Istanbul transition
 #  - [x] HIVE_FORK_MUIRGLACIER        block number for Muir Glacier transition
-#  - [x] HIVE_FORK_BERLIN             block number for Berlin transition
-#  - [x] HIVE_FORK_LONDON             block number for London transition
+#  - [x] HIVE_FORK_SILA_BERLIN             block number for Berlin transition
+#  - [x] HIVE_FORK_SILA_LONDON             block number for London transition
 #  - [x] HIVE_FORK_MERGE              block number for Merge transition
 #
 # Clique PoA:

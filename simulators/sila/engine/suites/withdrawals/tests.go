@@ -506,7 +506,7 @@ var Tests = []test.Spec{
 	},
 	// TODO: REORG SYNC WHERE SYNCED BLOCKS HAVE WITHDRAWALS BEFORE TIME
 
-	// EVM Tests (SIP-3651, SIP-3855, SIP-3860)
+	// Sivm Tests (SIP-3651, SIP-3855, SIP-3860)
 	&MaxInitcodeSizeSpec{
 		WithdrawalsBaseSpec: &WithdrawalsBaseSpec{
 			BaseSpec: test.BaseSpec{
@@ -887,8 +887,8 @@ func (wh WithdrawalsHistory) VerifyWithdrawals(block uint64, rpcBlock *big.Int, 
 		r := testEngine.TestBalanceAt(account, rpcBlock)
 		r.ExpectBalanceEqual(expectedBalance)
 		// All withdrawals account have a bytecode that unconditionally set the
-		// zero storage key to one on EVM execution.
-		// Withdrawals must not trigger EVM so we expect zero.
+		// zero storage key to one on Sivm execution.
+		// Withdrawals must not trigger Sivm so we expect zero.
 		s := testEngine.TestStorageAt(account, common.BigToHash(common.Big0), rpcBlock)
 		s.ExpectBigIntStorageEqual(common.Big0)
 	}
