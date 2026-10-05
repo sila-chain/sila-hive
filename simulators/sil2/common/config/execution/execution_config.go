@@ -369,7 +369,7 @@ func (conf *ExecutionGenesis) ToParams(
 		"HIVE_FORK_SILA_HOMESTEAD":      conf.Genesis.Config.HomesteadBlock.String(),
 		//"HIVE_FORK_DAO_BLOCK":           conf.Genesis.Config.DAOForkBlock.String(),  // nil error, not used anyway
 		"HIVE_FORK_SIP150":            conf.Genesis.Config.SIP150Block.String(),
-		"HIVE_FORK_SIP158":             conf.Genesis.Config.SIP155Block.String(), // also sip558
+		"HIVE_FORK_SIP158":             conf.Genesis.Config.SIP158Block.String(),
 		"HIVE_FORK_SILA_BYZANTIUM":       conf.Genesis.Config.ByzantiumBlock.String(),
 		"HIVE_FORK_SILA_CONSTANTINOPLE":  conf.Genesis.Config.ConstantinopleBlock.String(),
 		"HIVE_FORK_PETERSBURG":           conf.Genesis.Config.PetersburgBlock.String(),

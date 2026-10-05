@@ -37,7 +37,7 @@ func (g *generator) writeForkEnv() error {
 	}
 	setNum("HIVE_FORK_SILA_HOMESTEAD", cfg.SilaHomesteadBlock)
 	setNum("HIVE_FORK_SIP150", cfg.SIP150Block)
-	setNum("HIVE_FORK_SIP158", cfg.SIP155Block)
+	setNum("HIVE_FORK_SIP158", cfg.SIP158Block)
 	setNum("HIVE_FORK_SILA_BYZANTIUM", cfg.SilaByzantiumBlock)
 	setNum("HIVE_FORK_SILA_CONSTANTINOPLE", cfg.SilaConstantinopleBlock)
 	setNum("HIVE_FORK_PETERSBURG", cfg.PetersburgBlock)
