@@ -3,7 +3,7 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 ## Default git-ref/fork
 ARG branch=""
-ARG fork=Osaka
+ARG fork=SilaOsaka
 ENV FORK=${fork}
 
 ## Clone and install SELS
